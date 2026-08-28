@@ -26,6 +26,9 @@ describe('generated corporate site', () => {
 
   it('generates an accessible, factual home page', () => {
     const html = page('');
+    expect(html).toContain('<title>US5 Inc.</title>');
+    expect(html).toContain('<meta property="og:title" content="US5 Inc.">');
+    expect(html).not.toContain('<title>Mobile games and digital solutions');
     expect(html).toContain('Games that entertain.');
     expect(html).toContain('Skip to content');
     expect(html).toContain('aria-label="Primary navigation"');
@@ -38,6 +41,9 @@ describe('generated corporate site', () => {
     const approvedPath = 'M64 26 H34 V60 A26 26 0 0 0 86 60 V42';
     expect(html).toContain(approvedPath);
     expect(favicon).toContain(approvedPath);
+    expect(favicon).toContain('fill="#0A0E1A"');
+    expect(favicon).toContain('stroke="#F4F5F7"');
+    expect(favicon).not.toContain('linearGradient');
     expect(html).not.toContain('M10 11v13');
   });
 
