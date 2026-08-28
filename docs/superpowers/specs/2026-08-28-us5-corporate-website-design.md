@@ -8,8 +8,8 @@ Build a credible, fast corporate website for US5 Incorporation that presents its
 
 - Public name: US5 Incorporation
 - Contact email: `usfiveincorporation@gmail.com`
-- GitHub repository: `usfiveincorporation/us5`
-- Production URL: `https://usfiveincorporation.github.io/us5/`
+- GitHub repository: `us5inc/us5`
+- Production URL: `https://us5inc.github.io/us5/`
 - No Android product is currently published.
 - No phone number, street address, location, LinkedIn profile, form service, analytics service, advertising identifier, client list, certification, or company statistic has been supplied.
 
@@ -88,4 +88,4 @@ Automated checks will cover strict type checking, linting, formatting, a product
 
 GitHub Actions will install from a lockfile, run the quality checks, build the static site, upload the Pages artifact, and deploy it using GitHub’s official Pages actions. Repository documentation will explain local commands, Pages configuration, the base-path setting, custom domains, product onboarding, privacy review, and the absence of `app-ads.txt` until a real publisher entry is supplied.
 
-Implementation is complete only after the production build and checks pass. Deployment is complete only after the workflow succeeds and `https://usfiveincorporation.github.io/us5/` is reachable and inspected.
+Implementation is complete only after the production build and checks pass. Deployment is complete only after the workflow succeeds and `https://us5inc.github.io/us5/` is reachable and inspected.

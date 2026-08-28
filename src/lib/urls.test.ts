@@ -12,6 +12,6 @@ describe('site URLs', () => {
   });
 
   it('creates canonical production URLs', () => {
-    expect(absoluteUrl('/privacy/')).toBe('https://usfiveincorporation.github.io/us5/privacy/');
+    expect(absoluteUrl('/privacy/')).toBe('https://us5inc.github.io/us5/privacy/');
   });
 });

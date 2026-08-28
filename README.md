@@ -22,7 +22,7 @@ npm run check
 
 ## Deployment
 
-The workflow in `.github/workflows/deploy.yml` checks and deploys pushes to `main`. In GitHub, open **Settings → Pages** and choose **GitHub Actions** as the source. The production address is `https://usfiveincorporation.github.io/us5/`.
+The workflow in `.github/workflows/deploy.yml` checks and deploys pushes to `main`. In GitHub, open **Settings → Pages** and choose **GitHub Actions** as the source. The production address is `https://us5inc.github.io/us5/`.
 
 For a custom domain, add the domain in **Settings → Pages**, configure the DNS records GitHub provides, add a `public/CNAME` file containing only that domain, and set `PUBLIC_SITE_BASE` to `/` in the workflow.
 

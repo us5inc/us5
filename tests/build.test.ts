@@ -20,9 +20,7 @@ describe('generated corporate site', () => {
     'data-deletion',
   ])('generates the %s route with canonical metadata', (route) => {
     const html = page(route);
-    expect(html).toContain(
-      `<link rel="canonical" href="https://usfiveincorporation.github.io/us5/${route}/">`,
-    );
+    expect(html).toContain(`<link rel="canonical" href="https://us5inc.github.io/us5/${route}/">`);
     expect(html).toContain('<meta name="description"');
   });
 

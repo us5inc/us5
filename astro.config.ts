@@ -5,7 +5,7 @@ const rawBase = process.env.PUBLIC_SITE_BASE ?? '/us5';
 const base = rawBase === '/' ? '/' : `/${rawBase.replace(/^\/+|\/+$/g, '')}`;
 
 export default defineConfig({
-  site: 'https://usfiveincorporation.github.io',
+  site: 'https://us5inc.github.io',
   base,
   output: 'static',
   integrations: [sitemap()],

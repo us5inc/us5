@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build, verify, and deploy the production-ready static corporate website for US5 Incorporation at `https://usfiveincorporation.github.io/us5/`.
+**Goal:** Build, verify, and deploy the production-ready static corporate website for US5 Incorporation at `https://us5inc.github.io/us5/`.
 
 **Architecture:** Astro statically generates base-aware pages from focused layouts, components, and validated configuration. HTML and CSS provide the core experience; small standalone browser scripts enhance navigation and the email enquiry form without creating a backend or false submission state.
 
@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Public name is `US5 Incorporation`; contact email is `usfiveincorporation@gmail.com`.
-- Production origin is `https://usfiveincorporation.github.io`; default base path is `/us5`.
+- Production origin is `https://us5inc.github.io`; default base path is `/us5`.
 - Do not publish products, product claims, product policies, company statistics, addresses, phone numbers, social profiles, client claims, certifications, analytics, advertising, cookies, or `app-ads.txt` without verified configuration.
 - All pages are static and work from 320-pixel viewports upward with semantic HTML, keyboard navigation, visible focus states, WCAG AA contrast, and reduced-motion support.
 - Internal links and assets must use base-aware URL helpers.
@@ -46,7 +46,7 @@
 
 - [ ] **Step 1: Scaffold dependencies and strict configuration**
 
-Create Astro configuration that reads `PUBLIC_SITE_BASE`, normalizes it to `/` or a slash-delimited segment, defaults to `/us5`, and sets `site: "https://usfiveincorporation.github.io"`. Configure `strictest` Astro TypeScript, ESLint for TypeScript/Astro, Prettier with the Astro plugin, Vitest, Playwright, and axe-core. Generate and retain the npm lockfile.
+Create Astro configuration that reads `PUBLIC_SITE_BASE`, normalizes it to `/` or a slash-delimited segment, defaults to `/us5`, and sets `site: "https://us5inc.github.io"`. Configure `strictest` Astro TypeScript, ESLint for TypeScript/Astro, Prettier with the Astro plugin, Vitest, Playwright, and axe-core. Generate and retain the npm lockfile.
 
 - [ ] **Step 2: Write the failing URL tests**
 
@@ -61,7 +61,7 @@ describe('site URLs', () => {
   });
 
   it('creates canonical production URLs', () => {
-    expect(absoluteUrl('/privacy/')).toBe('https://usfiveincorporation.github.io/us5/privacy/');
+    expect(absoluteUrl('/privacy/')).toBe('https://us5inc.github.io/us5/privacy/');
   });
 });
 ```
@@ -78,7 +78,7 @@ Expected: FAIL because `src/lib/urls.ts` does not exist.
 export const siteConfig = {
   name: 'US5 Incorporation',
   email: 'usfiveincorporation@gmail.com',
-  origin: 'https://usfiveincorporation.github.io',
+  origin: 'https://us5inc.github.io',
   base: import.meta.env.PUBLIC_SITE_BASE || '/us5',
 } as const;
 
@@ -350,7 +350,7 @@ git commit -m "feat: add validated product privacy system"
 
 - [ ] **Step 1: Write the failing build verifier**
 
-Make `verify-build.mjs` recursively inspect `dist`, parse local HTML links, and fail on missing local targets, root-incorrect `/assets` links, unresolved template markers, malformed canonical URLs, absent privacy/legal routes, or secrets matching private-key headers. It must confirm that sitemap and robots references use `https://usfiveincorporation.github.io/us5/`.
+Make `verify-build.mjs` recursively inspect `dist`, parse local HTML links, and fail on missing local targets, root-incorrect `/assets` links, unresolved template markers, malformed canonical URLs, absent privacy/legal routes, or secrets matching private-key headers. It must confirm that sitemap and robots references use `https://us5inc.github.io/us5/`.
 
 - [ ] **Step 2: Run verification and confirm failure**
 
@@ -415,11 +415,11 @@ git commit -m "ci: deploy verified site to GitHub Pages"
 git push -u origin main
 ```
 
-Expected: push succeeds to `https://github.com/usfiveincorporation/us5.git`.
+Expected: push succeeds to `https://github.com/us5inc/us5.git`.
 
 - [ ] **Step 5: Enable and verify GitHub Pages**
 
-In repository Settings → Pages, set Source to “GitHub Actions” if it is not already selected. Inspect the Actions run until deployment succeeds, then load `https://usfiveincorporation.github.io/us5/`, the legal URLs, navigation, mobile menu, and email enquiry flow. Do not report deployment success if the URL is unreachable or the workflow failed.
+In repository Settings → Pages, set Source to “GitHub Actions” if it is not already selected. Inspect the Actions run until deployment succeeds, then load `https://us5inc.github.io/us5/`, the legal URLs, navigation, mobile menu, and email enquiry flow. Do not report deployment success if the URL is unreachable or the workflow failed.
 
 - [ ] **Step 6: Record final evidence**
 
