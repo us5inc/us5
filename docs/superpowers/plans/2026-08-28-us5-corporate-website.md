@@ -25,6 +25,7 @@
 ### Task 1: Project foundation and base-aware URL configuration
 
 **Files:**
+
 - Create: `package.json`
 - Create: `package-lock.json`
 - Create: `astro.config.ts`
@@ -39,6 +40,7 @@
 - Test: `src/lib/urls.test.ts`
 
 **Interfaces:**
+
 - Produces: `siteConfig`, `type SiteConfig`, `withBase(path: string): string`, and `absoluteUrl(path: string): string`.
 - Produces scripts: `dev`, `build`, `preview`, `typecheck`, `lint`, `format:check`, `test`, and `test:e2e`.
 
@@ -105,6 +107,7 @@ git commit -m "build: establish Astro project foundation"
 ### Task 2: Brand assets, global styles, metadata, and site shell
 
 **Files:**
+
 - Create: `public/favicon.svg`
 - Create: `public/icon-192.svg`
 - Create: `public/icon-512.svg`
@@ -119,6 +122,7 @@ git commit -m "build: establish Astro project foundation"
 - Test: `src/components/site-shell.test.ts`
 
 **Interfaces:**
+
 - Consumes: `siteConfig`, `withBase`, and `absoluteUrl` from Task 1.
 - Produces: `BaseLayout` props `{ title: string; description: string; image?: string; noindex?: boolean; structuredData?: Record<string, unknown> }`.
 
@@ -158,6 +162,7 @@ git commit -m "feat: add US5 brand and accessible site shell"
 ### Task 3: Corporate content pages and reusable sections
 
 **Files:**
+
 - Create: `src/config/navigation.ts`
 - Create: `src/config/services.ts`
 - Create: `src/components/Hero.astro`
@@ -172,6 +177,7 @@ git commit -m "feat: add US5 brand and accessible site shell"
 - Test: `src/pages/corporate-pages.test.ts`
 
 **Interfaces:**
+
 - Consumes: `BaseLayout`, `withBase`, and `siteConfig`.
 - Produces: static routes `/`, `/about/`, `/services/`, and `/digital-solutions/`.
 
@@ -207,6 +213,7 @@ git commit -m "feat: add corporate capability pages"
 ### Task 4: Contact, support, and legal experience
 
 **Files:**
+
 - Create: `src/lib/enquiry.ts`
 - Create: `src/lib/enquiry.test.ts`
 - Create: `src/components/EnquiryForm.astro`
@@ -219,6 +226,7 @@ git commit -m "feat: add corporate capability pages"
 - Test: `src/pages/legal-pages.test.ts`
 
 **Interfaces:**
+
 - Produces: `type Enquiry`, `validateEnquiry(value: FormData): Record<string, string>`, and `buildMailto(enquiry: Enquiry): string`.
 - Produces routes `/contact/`, `/support/`, `/privacy/`, `/terms/`, and `/data-deletion/`.
 
@@ -228,7 +236,12 @@ git commit -m "feat: add corporate capability pages"
 it('rejects missing required fields and invalid email', () => {
   const data = new FormData();
   data.set('email', 'invalid');
-  expect(validateEnquiry(data)).toMatchObject({ name: expect.any(String), email: expect.any(String), summary: expect.any(String), consent: expect.any(String) });
+  expect(validateEnquiry(data)).toMatchObject({
+    name: expect.any(String),
+    email: expect.any(String),
+    summary: expect.any(String),
+    consent: expect.any(String),
+  });
 });
 
 it('builds an encoded email draft without claiming delivery', () => {
@@ -269,6 +282,7 @@ git commit -m "feat: add enquiry, support, and legal pages"
 ### Task 5: Validated future product and privacy-policy system
 
 **Files:**
+
 - Create: `src/config/product-schema.ts`
 - Create: `src/config/products.ts`
 - Create: `src/config/product-schema.test.ts`
@@ -281,6 +295,7 @@ git commit -m "feat: add enquiry, support, and legal pages"
 - Test: `src/pages/product-routes.test.ts`
 
 **Interfaces:**
+
 - Produces: Zod `productSchema`, inferred `Product` type, and `products: readonly Product[]`, initially `[]`.
 - Product fields cover identity, package, dates, contacts, description, category, verified features, media, Play URL, audience, direct collection, SDK processing, sharing, advertising, analytics, crash reporting, purchases, accounts, location, device identifiers, retention, security, rights, deletion, and provider-policy links.
 
@@ -320,6 +335,7 @@ git commit -m "feat: add validated product privacy system"
 ### Task 6: Static discovery files, 404 behavior, and end-to-end quality checks
 
 **Files:**
+
 - Create: `src/pages/robots.txt.ts`
 - Create: `src/pages/404.astro`
 - Create: `src/pages/manifest.webmanifest.ts`
@@ -329,6 +345,7 @@ git commit -m "feat: add validated product privacy system"
 - Modify: `package.json`
 
 **Interfaces:**
+
 - Produces scripts `verify:build` and `check` where `check` runs formatting, lint, typecheck, unit tests, build verification, and end-to-end tests.
 
 - [ ] **Step 1: Write the failing build verifier**
@@ -365,12 +382,14 @@ git commit -m "test: verify static site quality and accessibility"
 ### Task 7: GitHub Pages automation and maintainer documentation
 
 **Files:**
+
 - Create: `.github/workflows/deploy.yml`
 - Create: `README.md`
 - Modify: `docs/superpowers/specs/2026-08-28-us5-corporate-website-design.md` only if implementation reveals an approved clarification
 - Test: `.github/workflows/deploy.yml` via action syntax inspection and GitHub run
 
 **Interfaces:**
+
 - Consumes: `npm ci` and `npm run check` from Tasks 1 and 6.
 - Produces: a Pages deployment from `main` and complete maintainer instructions.
 
