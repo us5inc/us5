@@ -1,0 +1,40 @@
+---
+import Logo from './Logo.astro';
+import { withBase } from '../lib/urls';
+const links = [
+  ['About', '/about/'],
+  ['Services', '/services/'],
+  ['Digital Solutions', '/digital-solutions/'],
+  ['Contact', '/contact/'],
+] as const;
+---
+
+<header class="site-header">
+  <div class="shell nav-wrap">
+    <Logo /><button class="menu" type="button" aria-expanded="false" aria-controls="primary-nav"
+      ><span class="sr-only">Toggle navigation</span><span></span><span></span></button
+    ><nav id="primary-nav" aria-label="Primary navigation">
+      {links.map(([label, path]) => <a href={withBase(path)}>{label}</a>)}<a
+        class="button compact"
+        href={withBase('/contact/')}>Start a conversation</a
+      >
+    </nav>
+  </div>
+</header>
+<script>
+  const button = document.querySelector<HTMLButtonElement>('.menu');
+  const nav = document.querySelector<HTMLElement>('#primary-nav');
+  const close = () => {
+    button?.setAttribute('aria-expanded', 'false');
+    nav?.classList.remove('open');
+  };
+  button?.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(open));
+    nav?.classList.toggle('open', open);
+  });
+  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', close));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') close();
+  });
+</script>

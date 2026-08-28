@@ -1,0 +1,70 @@
+<form id="enquiry" novalidate>
+  <div id="form-status" class="form-note" aria-live="polite">
+    Your email application will open with a prepared message. Nothing is stored by this website.
+  </div><div class="field">
+    <label for="name">Name</label><input id="name" name="name" autocomplete="name" required /><small
+      data-error="name"></small>
+  </div><div class="field">
+    <label for="email">Email</label><input
+      id="email"
+      name="email"
+      type="email"
+      autocomplete="email"
+      required
+    /><small data-error="email"></small>
+  </div><div class="field">
+    <label for="company">Company <span class="form-note">(optional)</span></label><input
+      id="company"
+      name="company"
+      autocomplete="organization"
+    />
+  </div><div class="field">
+    <label for="service">Service required</label><select id="service" name="service" required
+      ><option value="">Select a service</option><option>Mobile game development</option><option
+        >Mobile application</option
+      ><option>UI/UX design</option><option>Digital solution</option><option
+        >Product modernization</option
+      ><option>Quality and performance</option><option>Maintenance and support</option></select
+    ><small data-error="service"></small>
+  </div><div class="field">
+    <label for="summary">Project summary</label><textarea
+      id="summary"
+      name="summary"
+      minlength="20"
+      maxlength="3000"
+      required></textarea><small data-error="summary"></small>
+  </div><label class="check"
+    ><input name="consent" type="checkbox" required /><span
+      >I agree that US5 Incorporation may use these details to respond to my enquiry.</span
+    ></label
+  ><small data-error="consent"></small><button class="button" type="submit"
+    >Prepare email enquiry</button
+  >
+</form>
+<script>
+  import { buildMailto, validateEnquiry } from '../lib/enquiry';
+  const form = document.querySelector<HTMLFormElement>('#enquiry');
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const errors = validateEnquiry(data);
+    form.querySelectorAll<HTMLElement>('[data-error]').forEach((el) => {
+      const key = el.dataset.error ?? '';
+      el.textContent = errors[key] ?? '';
+      el.style.color = errors[key] ? '#ff9da8' : '';
+    });
+    if (Object.keys(errors).length) {
+      document.querySelector('#form-status')!.textContent =
+        'Please correct the highlighted fields.';
+      return;
+    }
+    const get = (key: string) => String(data.get(key) ?? '').trim();
+    window.location.href = buildMailto({
+      name: get('name'),
+      email: get('email'),
+      company: get('company'),
+      service: get('service'),
+      summary: get('summary'),
+    });
+  });
+</script>

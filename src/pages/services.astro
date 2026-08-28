@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Cta from '../components/Cta.astro';
+import { services } from '../config/services';
+---
+
+<BaseLayout
+  title="Services"
+  description="Mobile game development, application development, design, modernization, quality, and support from US5 Incorporation."
+  path="/services/"
+  ><PageHero
+    eyebrow="Services"
+    title="Capabilities shaped around outcomes."
+    intro="Choose focused support for one product stage or connect the full journey from concept through ongoing improvement."
+  /><section class="section">
+    <div class="shell grid">
+      {
+        services.map(([title, body], i) => (
+          <article class="card">
+            <>
+              <span class="index">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </>
+          </article>
+        ))
+      }
+    </div>
+  </section><Cta /></BaseLayout
+>

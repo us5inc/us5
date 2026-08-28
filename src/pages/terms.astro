@@ -1,0 +1,30 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { siteConfig } from '../config/site';
+---
+
+<LegalLayout
+  title="Terms of use"
+  description="Terms governing use of the US5 Incorporation corporate website."
+  path="/terms/"
+  updated="28 August 2026"
+  ><h2>Using this website</h2><p>
+    You may use this website for lawful informational and business-enquiry purposes. Do not attempt
+    to disrupt the site, misuse its content, or interfere with other visitors.
+  </p><h2>Information and availability</h2><p>
+    We aim to keep website information clear and current, but general information is not a promise
+    that a particular service or outcome is available. We may change or withdraw website content
+    without notice.
+  </p><h2>Intellectual property</h2><p>
+    The original website design, writing, and US5 identity are owned by or licensed to US5
+    Incorporation. Third-party names and services remain the property of their respective owners.
+  </p><h2>Links and limitations</h2><p>
+    External services operate under their own terms. To the extent permitted by applicable law, the
+    website is provided without guarantees of uninterrupted availability, and US5 Incorporation is
+    not responsible for indirect loss arising solely from use of this informational site.
+  </p><h2>Contact</h2><p>
+    Questions about these terms may be sent to <a href={`mailto:${siteConfig.email}`}
+      >{siteConfig.email}</a
+    >.
+  </p></LegalLayout
+>

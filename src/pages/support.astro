@@ -1,0 +1,22 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { siteConfig } from '../config/site';
+---
+
+<LegalLayout
+  title="Support"
+  description="Contact US5 Incorporation for website, product, and privacy support."
+  path="/support/"
+  updated="28 August 2026"
+  ><h2>How we can help</h2><p>
+    For website questions, business enquiries, privacy requests, or support relating to a future US5
+    product, email <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
+  </p><h2>What to include</h2><p>
+    Describe the product or page involved, what you expected, and what happened. For privacy
+    requests, include enough information for us to identify the relevant correspondence or product
+    context, but do not send passwords or sensitive credentials.
+  </p><h2>Product support</h2><p>
+    Product-specific support information will be published with each public release. No US5 mobile
+    product is currently listed on this website.
+  </p></LegalLayout
+>

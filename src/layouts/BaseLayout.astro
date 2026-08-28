@@ -1,0 +1,65 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { absoluteUrl, withBase } from '../lib/urls';
+import { siteConfig } from '../config/site';
+import spaceFont from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import plexFont from '@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2?url';
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/ibm-plex-sans';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '../styles/global.css';
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+}
+const { title, description, path } = Astro.props;
+const canonical = absoluteUrl(path);
+const fullTitle = `${title} | ${siteConfig.name}`;
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteConfig.name,
+  url: absoluteUrl('/'),
+  email: siteConfig.email,
+  description: siteConfig.description,
+  logo: absoluteUrl('/favicon.svg'),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head
+    ><meta charset="UTF-8" /><meta name="viewport" content="width=device-width" /><meta
+      name="theme-color"
+      content="#0A0E1A"
+    /><title>{fullTitle}</title><meta name="description" content={description} /><link
+      rel="canonical"
+      href={canonical}
+    /><link rel="preload" href={spaceFont} as="font" type="font/woff2" crossorigin /><link
+      rel="preload"
+      href={plexFont}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    /><link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" /><link
+      rel="manifest"
+      href={withBase('/manifest.webmanifest')}
+    /><meta property="og:type" content="website" /><meta
+      property="og:title"
+      content={fullTitle}
+    /><meta property="og:description" content={description} /><meta
+      property="og:url"
+      content={canonical}
+    /><meta property="og:image" content={absoluteUrl('/social-card.svg')} /><meta
+      name="twitter:card"
+      content="summary_large_image"
+    /><script is:inline type="application/ld+json" set:html={JSON.stringify(organization)} /></head
+  ><body
+    ><a class="skip" href="#content">Skip to content</a><Header /><main id="content">
+      <slot />
+    </main><Footer /></body
+  >
+</html>

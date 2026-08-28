@@ -1,0 +1,63 @@
+---
+import LegalLayout from '../../../layouts/LegalLayout.astro';
+import { products } from '../../../config/products';
+export function getStaticPaths() {
+  return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+const { product } = Astro.props;
+const none = (items: unknown[]) =>
+  items.length ? 'See the details below.' : 'None confirmed for this release.';
+---
+
+<LegalLayout
+  title={`${product.name} privacy policy`}
+  description={`Privacy information for ${product.name} by US5 Incorporation.`}
+  path={`/products/${product.slug}/privacy/`}
+  updated={product.updatedDate}
+  ><h2>1. Introduction</h2><p>
+    This policy explains how {product.developer} handles information in {product.name} ({
+      product.packageName
+    }). Effective {product.effectiveDate}.
+  </p><h2>2. Information collected</h2><p>
+    Direct collection: {none(product.directCollection)} Third-party SDK processing: {
+      none(product.sdkProcessing)
+    }
+  </p><h2>3. How information is used</h2><p>
+    Information is used only for the purposes listed in this verified product configuration.
+  </p><h2>4. Advertising</h2><p>
+    {
+      product.advertising
+        ? 'Advertising services are enabled as described by the providers below.'
+        : 'Advertising is not enabled.'
+    }
+  </p><h2>5. Analytics and crash reporting</h2><p>
+    Analytics: {product.analytics ? 'enabled' : 'not enabled'}. Crash reporting: {
+      product.crashReporting ? 'enabled' : 'not enabled'
+    }.
+  </p><h2>6. Third-party services</h2><ul>
+    {
+      product.providers.map((item) => (
+        <li>
+          <a href={item.privacyUrl}>{item.name}</a>: {item.role}
+        </li>
+      ))
+    }
+  </ul><h2>7. Data sharing</h2><p>{none(product.sharing)}</p><h2>8. Data retention</h2><p>
+    {product.retention}
+  </p><h2>9. Data security</h2><p>{product.security}</p><h2>10. Children’s privacy</h2><p>
+    {
+      product.children
+        ? 'This product is intended for children; the configured practices must be reviewed for the applicable audience.'
+        : 'This product is not identified as intended for children.'
+    }
+  </p><h2>11. User rights and choices</h2><p>{product.rights}</p><h2>12. Data deletion</h2><p>
+    {product.deletion}
+  </p><h2>13. International processing</h2><p>
+    Service providers may process information where they operate, subject to their safeguards and
+    applicable requirements.
+  </p><h2>14. Changes</h2><p>
+    Material changes will be reflected by the updated date on this policy.
+  </p><h2>15. Contact</h2><p>
+    <a href={`mailto:${product.supportEmail}`}>{product.supportEmail}</a>
+  </p></LegalLayout
+>

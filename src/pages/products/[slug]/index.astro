@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { products } from '../../../config/products';
+import { withBase } from '../../../lib/urls';
+export function getStaticPaths() {
+  return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+const { product } = Astro.props;
+---
+
+<BaseLayout
+  title={product.name}
+  description={product.description}
+  path={`/products/${product.slug}/`}
+  ><section class="page-hero shell">
+    <span class="eyebrow">{product.category}</span><h1>{product.name}</h1><p>
+      {product.description}
+    </p><div class="actions">
+      <a class="button" href={product.playUrl}>View on Google Play</a><a
+        class="button secondary"
+        href={withBase(`/products/${product.slug}/privacy/`)}>Privacy policy</a
+      >
+    </div>
+  </section><section class="section">
+    <div class="shell">
+      <div class="section-head"><h2>Highlights</h2></div><div class="grid">
+        {
+          product.features.map((feature, i) => (
+            <article class="card">
+              <>
+                <span class="index">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{feature}</h3>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section></BaseLayout
+>

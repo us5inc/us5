@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Cta from '../components/Cta.astro';
+import HeroMark from '../components/HeroMark.astro';
+import { services } from '../config/services';
+import { withBase } from '../lib/urls';
+---
+
+<BaseLayout
+  title="Mobile games and digital solutions"
+  description="US5 Incorporation creates engaging mobile experiences and practical digital solutions."
+  path="/"
+  ><section class="hero">
+    <div class="shell hero-grid">
+      <div>
+        <span class="eyebrow">Mobile products, thoughtfully made</span><h1>
+          Games that entertain.<br /><span class="gradient">Digital solutions that perform.</span>
+        </h1><p class="lead">
+          US5 Incorporation designs and develops mobile experiences that balance engaging
+          interaction with dependable product thinking.
+        </p><div class="actions">
+          <a class="button" href={withBase('/products/')}>Explore our games</a><a
+            class="button secondary"
+            href={withBase('/contact/')}>Discuss a project</a
+          >
+        </div>
+      </div><HeroMark />
+    </div>
+  </section><section class="section alt">
+    <div class="shell">
+      <div class="section-head">
+        <span class="eyebrow">What we build</span><h2>
+          From first interaction to lasting utility.
+        </h2><p>
+          Focused delivery for entertainment products and the digital systems that help
+          organizations move forward.
+        </p>
+      </div><div class="grid">
+        {
+          services.slice(0, 6).map(([title, body], i) => (
+            <article class="card">
+              <>
+                <span class="index">0{i + 1}</span>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section><section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <span class="eyebrow">How we work</span><h2>Clarity at every stage.</h2><p>
+          We connect product intent, interface design, engineering, testing, and delivery so each
+          decision supports the experience as a whole.
+        </p>
+      </div><div class="grid">
+        <article class="card">
+          <span class="index">01</span><h3>Define</h3><p>
+            Align the product, audience, constraints, and measure of success before complexity
+            grows.
+          </p>
+        </article><article class="card">
+          <span class="index">02</span><h3>Build</h3><p>
+            Develop in focused increments with usability and performance considered throughout.
+          </p>
+        </article><article class="card">
+          <span class="index">03</span><h3>Refine</h3><p>
+            Test the complete experience, resolve friction, and prepare a responsible release.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section><Cta /></BaseLayout
+>

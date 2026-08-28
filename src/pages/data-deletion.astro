@@ -1,0 +1,28 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { siteConfig } from '../config/site';
+---
+
+<LegalLayout
+  title="Data deletion instructions"
+  description="How to request deletion of information associated with US5 Incorporation correspondence or products."
+  path="/data-deletion/"
+  updated="28 August 2026"
+  ><h2>Website correspondence</h2><p>
+    The website itself does not store form submissions. If you sent an enquiry by email and want
+    related correspondence reviewed for deletion, email <a
+      href={`mailto:${siteConfig.email}?subject=Data%20deletion%20request`}>{siteConfig.email}</a
+    > with the subject “Data deletion request.”
+  </p><h2>What to include</h2><p>
+    Provide the email address used, approximate date, and enough context to locate the
+    correspondence. Do not include passwords or sensitive credentials. We may need to verify that
+    you control the relevant email address.
+  </p><h2>What happens next</h2><p>
+    We will review the request and explain the action taken. Some information may need to be
+    retained where reasonably necessary for security, legal obligations, dispute resolution, or
+    legitimate record keeping.
+  </p><h2>Future mobile products</h2><p>
+    Each public product will provide product-specific deletion instructions reflecting its actual
+    accounts, data, and service providers. No mobile product is currently published on this website.
+  </p></LegalLayout
+>

@@ -1,0 +1,39 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { siteConfig } from '../config/site';
+---
+
+<LegalLayout
+  title="Website privacy policy"
+  description="How the US5 Incorporation website handles information and enquiries."
+  path="/privacy/"
+  updated="28 August 2026"
+  ><h2>Scope</h2><p>
+    This policy covers this corporate website. Future mobile products will have separate policies
+    based on their actual behavior.
+  </p><h2>Information you choose to provide</h2><p>
+    This website does not receive or store form submissions. The enquiry form prepares a message in
+    your own email application. If you send it, US5 Incorporation receives the information through
+    email and uses it to respond and manage the resulting correspondence.
+  </p><h2>Website operation</h2><p>
+    We do not intentionally deploy analytics, advertising, accounts, or non-essential cookies.
+    GitHub Pages delivers the website and may process ordinary technical information such as IP
+    addresses and request logs under GitHub’s own terms and privacy practices.
+  </p><h2>Sharing and retention</h2><p>
+    We do not sell website enquiry information. Email providers and infrastructure providers process
+    information as needed to deliver their services. Correspondence may be retained while relevant
+    to the enquiry, support, security, or legitimate record-keeping needs, then removed when no
+    longer reasonably needed.
+  </p><h2>Your choices</h2><p>
+    You may contact us to ask about, correct, or request deletion of information held in
+    correspondence, subject to information we reasonably need to retain for security, legal, or
+    record-keeping purposes.
+  </p><h2>Security</h2><p>
+    We use reasonable care when handling correspondence, but no internet transmission or storage
+    method can be guaranteed completely secure.
+  </p><h2>Changes and contact</h2><p>
+    We may update this policy when the website’s behavior changes. Questions can be sent to <a
+      href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a
+    >.
+  </p></LegalLayout
+>

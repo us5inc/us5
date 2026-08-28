@@ -1,0 +1,24 @@
+---
+import Logo from './Logo.astro';
+import { siteConfig } from '../config/site';
+import { withBase } from '../lib/urls';
+---
+
+<footer>
+  <div class="shell footer-grid">
+    <div>
+      <Logo /><p>Mobile experiences and practical digital products, built with care.</p>
+    </div><div>
+      <h2>Explore</h2><a href={withBase('/services/')}>Services</a><a
+        href={withBase('/digital-solutions/')}>Digital solutions</a
+      ><a href={withBase('/about/')}>About</a>
+    </div><div>
+      <h2>Company</h2><a href={withBase('/support/')}>Support</a><a href={withBase('/privacy/')}
+        >Privacy</a
+      ><a href={withBase('/terms/')}>Terms</a><a href={withBase('/data-deletion/')}>Data deletion</a
+      >
+    </div><div><h2>Contact</h2><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></div>
+  </div><div class="shell copyright">
+    © {new Date().getFullYear()} US5 Incorporation. All rights reserved.
+  </div>
+</footer>

@@ -40,9 +40,11 @@ The initial release excludes public product cards and product-specific privacy p
 
 ## Brand and experience
 
-The visual identity will use a dark charcoal foundation with controlled electric blue and violet accents. A custom geometric SVG mark and wordmark will express a polished game-technology character without resembling existing game artwork or another company identity.
+The visual identity uses the approved Pattern 1A “One stroke, three characters” system. Its continuous-stroke monogram uses the exact path `M64 26 H34 V60 A26 26 0 0 0 86 60 V42` on a 120 × 120 grid, with a 14-unit stroke and round caps and joins. Horizontal navigation and footer lockups pair the monogram with the US5 wordmark and INCORPORATION descriptor while preserving clear space equal to the monogram stroke width.
 
-Typography will use an optimized system-font stack. Layouts will be compact on mobile, spacious on larger screens, and usable from 320-pixel viewports upward. Decorative grids, restrained gradients, and small interface details will provide energy without heavy glow or distracting animation. Motion will be limited to progressive hover and reveal effects and disabled when reduced motion is requested.
+The website uses a mostly light application: White navigation and primary surfaces, Paper alternate sections, and Midnight hero, call-to-action, and footer areas. Signal Violet and Circuit Cyan provide controlled digital accents; their 135-degree gradient is limited to digital hero and icon applications. Space Grotesk is used for headings and wordmarks, IBM Plex Sans for body and interface copy, and IBM Plex Mono for labels and technical details. Optimized font files are self-hosted.
+
+Layouts will be compact on mobile, spacious on larger screens, and usable from 320-pixel viewports upward. Decorative construction grids, continuous paths, restrained gradients, and small interface details will provide energy without heavy glow or distracting animation. Motion will be limited to progressive hover effects and disabled when reduced motion is requested.
 
 Copy will remain concise and factual. It may describe broad capabilities and business outcomes but will not assert a founding date, team size, named technology partnership, client, award, certification, product performance figure, or product feature.
 

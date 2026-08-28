@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Cta from '../components/Cta.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="Learn how US5 Incorporation approaches mobile products, design, development, testing, and delivery."
+  path="/about/"
+  ><PageHero
+    eyebrow="About US5"
+    title="Purposeful experiences, built end to end."
+    intro="US5 Incorporation develops mobile games, applications, and digital solutions with close attention to the people who will use them."
+  /><section class="prose shell">
+    <h2>Product thinking meets careful execution</h2><p>
+      Good software begins with a clear reason to exist. We work from the intended experience and
+      business outcome, then connect design and engineering decisions to that purpose.
+    </p><h2>A complete delivery approach</h2><p>
+      Our process moves through definition, interaction design, development, testing, and release
+      preparation. Each stage is an opportunity to remove uncertainty and improve the whole
+      product—not simply complete a checklist.
+    </p><h2>Responsible by design</h2><p>
+      Performance, usability, privacy, and maintainability are product concerns. We consider them
+      throughout delivery so the result is easier to use, support, and evolve.
+    </p>
+  </section><Cta /></BaseLayout
+>

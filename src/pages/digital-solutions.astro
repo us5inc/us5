@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Cta from '../components/Cta.astro';
+const items = [
+  [
+    'Custom mobile applications',
+    'Give customers or teams a focused mobile experience shaped around a real workflow.',
+  ],
+  [
+    'Business workflow solutions',
+    'Reduce repetitive handoffs and bring important work into a clearer, more consistent flow.',
+  ],
+  [
+    'API integrations',
+    'Help products and services exchange information reliably across established boundaries.',
+  ],
+  [
+    'Cloud-connected systems',
+    'Connect applications to well-structured services that can support secure, dependable product experiences.',
+  ],
+  [
+    'Product consulting & modernization',
+    'Clarify the next practical move for an existing product, from experience improvements to technical renewal.',
+  ],
+];
+---
+
+<BaseLayout
+  title="Digital solutions"
+  description="Practical mobile applications, workflows, integrations, and product modernization from US5 Incorporation."
+  path="/digital-solutions/"
+  ><PageHero
+    eyebrow="Beyond games"
+    title="Digital products that make work flow better."
+    intro="We apply the same care for interaction and performance to practical software for organizations and their customers."
+  /><section class="section">
+    <div class="shell grid">
+      {
+        items.map(([title, body], i) => (
+          <article class="card">
+            <>
+              <span class="index">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </>
+          </article>
+        ))
+      }
+    </div>
+  </section><Cta /></BaseLayout
+>

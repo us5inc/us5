@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import { siteConfig } from '../config/site';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Discuss a mobile game, application, or digital product with US5 Incorporation."
+  path="/contact/"
+  ><PageHero
+    eyebrow="Start a conversation"
+    title="Tell us what you want to move forward."
+    intro="Share the goal, the audience, and where your product stands today. Your email application will prepare the message for you."
+  /><section class="section">
+    <div class="shell">
+      <EnquiryForm /><p class="form-note">
+        Prefer to write directly? Email <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a
+        >.
+      </p>
+    </div>
+  </section></BaseLayout
+>

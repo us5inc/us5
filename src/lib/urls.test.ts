@@ -7,6 +7,10 @@ describe('site URLs', () => {
     expect(withBase('/')).toBe('/us5/');
   });
 
+  it('preserves file asset paths without a trailing slash', () => {
+    expect(withBase('/favicon.svg')).toBe('/us5/favicon.svg');
+  });
+
   it('creates canonical production URLs', () => {
     expect(absoluteUrl('/privacy/')).toBe('https://usfiveincorporation.github.io/us5/privacy/');
   });
