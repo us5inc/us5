@@ -86,6 +86,6 @@ Automated checks will cover strict type checking, linting, formatting, a product
 
 ## Delivery
 
-GitHub Actions will install from a lockfile, run the quality checks, build the static site, upload the Pages artifact, and deploy it using GitHub’s official Pages actions. Repository documentation will explain local commands, Pages configuration, the base-path setting, custom domains, product onboarding, privacy review, and the absence of `app-ads.txt` until a real publisher entry is supplied.
+GitHub Actions will install from a lockfile, run the quality checks, build the static site, upload the Pages artifact, and deploy it using GitHub’s official Pages actions. Repository documentation will explain local commands, Pages configuration, the base-path setting, custom domains, product onboarding, and privacy review. The authorized AdMob seller record is published from the hostname-root repository `us5inc/us5inc.github.io` at `https://us5inc.github.io/app-ads.txt`.
 
 Implementation is complete only after the production build and checks pass. Deployment is complete only after the workflow succeeds and `https://us5inc.github.io/us5/` is reachable and inspected.
