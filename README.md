@@ -40,4 +40,4 @@ Before publishing, review every product policy against the app’s actual SDKs a
 
 ## Website behavior
 
-The contact form opens a prepared message in the visitor’s email application; this static site does not store or claim to send it. The site intentionally uses no analytics, advertising, accounts, or non-essential cookies, so it has no cookie banner. The authorized AdMob seller record is maintained in the `us5inc/us5inc.github.io` repository and published at `https://us5inc.github.io/app-ads.txt`, because AdMob crawls the hostname root rather than this project’s `/us5/` path.
+The contact form opens a prepared message in the visitor’s email application; this static site does not store or claim to send it. The site intentionally uses no analytics, advertising, accounts, or non-essential cookies, so it has no cookie banner. The authorized AdMob seller record is maintained at the crawler-required hostname root, `https://us5inc.github.io/app-ads.txt`, and mirrored at `https://us5inc.github.io/us5/app-ads.txt` for convenience.

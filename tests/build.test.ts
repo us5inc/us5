@@ -45,4 +45,9 @@ describe('generated corporate site', () => {
     expect(page('products')).toContain('Our first releases are in development');
     expect(page('products')).not.toContain('Google Play');
   });
+
+  it('publishes the authorized AdMob seller record', () => {
+    const record = readFileSync(join(root, 'dist', 'app-ads.txt'), 'utf8').trim();
+    expect(record).toBe('google.com, pub-9578601039790653, DIRECT, f08c47fec0942fa0');
+  });
 });
