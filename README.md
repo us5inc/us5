@@ -6,7 +6,7 @@ Production corporate website for US5 Incorporation, built with Astro and strict 
 
 The site uses the approved Pattern 1A “One stroke, three characters” identity. The monogram is constructed on a 120 × 120 grid with the path `M64 26 H34 V60 A26 26 0 0 0 86 60 V42`, a 14-unit stroke, and round caps and joins. Keep clear space around the mark equal to its stroke width.
 
-The palette is Midnight `#0A0E1A`, Signal Violet `#5B34E8`, Circuit Cyan `#22D3EE`, Paper `#F4F5F7`, and White. The violet-to-cyan gradient is for digital hero and icon applications only. Space Grotesk is used for the wordmark and headings, IBM Plex Sans for body and interface copy, and IBM Plex Mono for labels and technical details; all font files are self-hosted through the locked Fontsource packages.
+The website application palette is Midnight `#0A0E1A`, Paper `#F4F5F7`, and White `#FFFFFF` only. The full-color Neon Bubble Galaxy icon is the sole product-art exception. The master Pattern 1A brand source still records the broader corporate palette outside this web application. Space Grotesk is used for the wordmark and headings, IBM Plex Sans for body and interface copy, and IBM Plex Mono for labels and technical details; all font files are self-hosted through the locked Fontsource packages.
 
 ## Local development
 

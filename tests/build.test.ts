@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 
@@ -46,6 +46,21 @@ describe('generated corporate site', () => {
     expect(favicon).toContain('stroke="#F4F5F7"');
     expect(favicon).not.toContain('linearGradient');
     expect(html).not.toContain('M10 11v13');
+  });
+
+  it('ships a monochrome interface outside the product artwork', () => {
+    const css = readdirSync(join(root, 'dist', '_astro'))
+      .filter((file) => file.endsWith('.css'))
+      .map((file) => readFileSync(join(root, 'dist', '_astro', file), 'utf8'))
+      .join('\n');
+    const social = readFileSync(join(root, 'dist', 'social-card.svg'), 'utf8');
+    const home = page('');
+    const interfaceAssets = `${css}\n${social}\n${home}`;
+    expect(interfaceAssets).not.toMatch(/#5b34e8|#22d3ee/i);
+    expect(interfaceAssets).not.toContain('linearGradient');
+    expect(social).toContain('#0A0E1A');
+    expect(social).toContain('#F4F5F7');
+    expect(social).toContain('#FFFFFF');
   });
 
   it('does not publish a product claim while the catalog is empty', () => {
