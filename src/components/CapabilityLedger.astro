@@ -1,0 +1,21 @@
+---
+interface Props {
+  items: readonly (readonly [title: string, body: string])[];
+}
+
+const { items } = Astro.props;
+---
+
+<ol class="capability-ledger">
+  {
+    items.map(([title, body], index) => (
+      <li class="capability-row">
+        <span class="technical-index" aria-hidden="true">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <h3>{title}</h3>
+        <p>{body}</p>
+      </li>
+    ))
+  }
+</ol>

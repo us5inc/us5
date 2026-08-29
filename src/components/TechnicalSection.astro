@@ -1,0 +1,32 @@
+---
+interface Props {
+  figure: string;
+  label: string;
+  title: string;
+  intro?: string;
+  tone?: 'light' | 'dark';
+}
+
+const { figure, label, title, intro, tone = 'light' } = Astro.props;
+const headingId = `technical-section-${figure}`;
+---
+
+<section
+  class:list={['section', 'technical-section-band', `technical-section-band--${tone}`]}
+  data-figure={figure}
+  aria-labelledby={headingId}
+>
+  <div class="shell technical-section">
+    <div class="technical-meta">
+      <span class="technical-figure">FIG. {figure}</span>
+      <span class="eyebrow">{label}</span>
+    </div>
+    <div class="technical-copy">
+      <header class="section-head">
+        <h2 id={headingId}>{title}</h2>
+        {intro && <p>{intro}</p>}
+      </header>
+      <slot />
+    </div>
+  </div>
+</section>

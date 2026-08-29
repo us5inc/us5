@@ -1,0 +1,30 @@
+---
+import { featuredProduct } from '../config/featured-product';
+import { withBase } from '../lib/urls';
+---
+
+<section class="product-feature-band" aria-labelledby="featured-product-title">
+  <div class="shell">
+    <article class="product-feature">
+      <img
+        src={withBase(featuredProduct.icon)}
+        alt={`${featuredProduct.name} game icon`}
+        width="512"
+        height="512"
+      />
+      <div class="product-feature-copy">
+        <span class="eyebrow">{featuredProduct.status}</span>
+        <h2 id="featured-product-title">
+          <a href={withBase(featuredProduct.productPath)}>{featuredProduct.name}</a>
+        </h2>
+        <p>{featuredProduct.summary}</p>
+        <div class="product-feature-actions">
+          <a class="button compact" href={withBase(featuredProduct.productPath)}>View product</a>
+          <a href={withBase(featuredProduct.privacyPath)}>Privacy</a>
+          <a href={withBase(featuredProduct.supportPath)}>Support</a>
+          <a href={withBase(featuredProduct.deletionPath)}>Data deletion</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>

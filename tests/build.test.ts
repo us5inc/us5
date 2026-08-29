@@ -51,6 +51,16 @@ describe('generated corporate site', () => {
     expect(html).not.toMatch(/testimonial|downloads|five-star|award-winning/i);
   });
 
+  it('renders the Home editorial product and process structure', () => {
+    const home = mainContent(page(''));
+    expect(home).toContain('data-figure="01"');
+    expect(home).toMatch(/<ol class="process-rail"[^>]*>/);
+    expect(home).toMatch(
+      /<article class="product-feature"[\s\S]*href="\/us5\/products\/neon-bubble-galaxy\/"/,
+    );
+    expect(home).not.toMatch(/class="[^"]*\bcard\b[^"]*"/);
+  });
+
   it('uses the approved Pattern 1A identity', () => {
     const html = page('');
     const favicon = readFileSync(join(root, 'dist', 'favicon.svg'), 'utf8');

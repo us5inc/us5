@@ -3,10 +3,20 @@ interface Props {
   eyebrow: string;
   title: string;
   intro: string;
+  figure?: string;
 }
-const { eyebrow, title, intro } = Astro.props;
+const { eyebrow, title, intro, figure } = Astro.props;
 ---
 
-<header class="page-hero shell">
-  <span class="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{intro}</p>
+<header class="page-hero">
+  <div class="shell page-hero-grid">
+    <div class="technical-meta">
+      {figure && <span class="technical-figure">FIG. {figure}</span>}
+      <span class="eyebrow">{eyebrow}</span>
+    </div>
+    <div class="page-hero-copy">
+      <h1>{title}</h1>
+      <p>{intro}</p>
+    </div>
+  </div>
 </header>
