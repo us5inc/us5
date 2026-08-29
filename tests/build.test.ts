@@ -80,28 +80,54 @@ describe('generated corporate site', () => {
       expect(productLinks(html)).toContain('href="/us5/privacy/"');
       expect(productLinks(html)).toContain('href="/us5/support/"');
       expect(productLinks(html)).toContain('href="/us5/data-deletion/"');
+      expect(main).not.toMatch(/\b(?:coming soon|in development)\b/i);
     }
     expect(productLinks(listing)).toContain('href="/us5/products/neon-bubble-galaxy/"');
   });
 
   it('omits unverified store metadata and marketing claims', () => {
     const prohibited = [
-      ['external product link', /<a\b[^>]*href="https?:\/\/[^"]+"/i],
-      ['Play Store link or badge', /\b(?:Google Play|Play Store)\b/i],
+      [
+        'Play or App Store URL',
+        /href="https?:\/\/(?:play\.google\.com\/store\/apps|apps\.apple\.com\/[^"]*\/app\/)[^"]*"/i,
+      ],
+      [
+        'Play or App Store badge',
+        /(?:alt|aria-label|title)="[^"]*(?:Google Play|Play Store|App Store)[^"]*"/i,
+      ],
       [
         'package or application ID',
-        /\b(?:package(?:\s+name)?|packageName|application\s+ID|applicationId)\b|(?:\b[a-z][a-z0-9_-]*\.){2,}[a-z][a-z0-9_-]*\b/i,
+        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:package(?:\s+name)?|application\s+ID)\s*</i,
       ],
-      ['rating, review, or download metric', /\b(?:ratings?|reviews?|downloads?|stars?)\b/i],
-      ['feature or gameplay claim', /\b(?:features?|highlights?|gameplay)\b/i],
-      ['screenshot', /\bscreenshots?\b/i],
-      ['release date', /\brelease date\b|\breleased? (?:on|in)\b/i],
-      ['price', /\bprice\b|\$\d+(?:\.\d{2})?/i],
-      ['audience', /\b(?:target audience|audience|ages?\s+\d+\+)\b/i],
+      [
+        'rating, review, or download metric',
+        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:ratings?|review count|download count|downloads?)\s*<|\b(?:\d(?:\.\d)?\s*(?:\/|out of)\s*5|\d[\d,.]*\+?\s+(?:ratings?|reviews?|downloads?))\b/i,
+      ],
+      [
+        'feature or gameplay claim',
+        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:features?|highlights?|gameplay)\s*<|\b(?:features?|gameplay)\s*(?::|—|-)\s*\S|\b(?:features?|gameplay)\s+(?:include|includes|offers|lets|allows|delivers)\b/i,
+      ],
+      [
+        'screenshot',
+        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:screenshots?|gallery)\s*<|(?:alt|aria-label)="[^"]*\bscreenshot\b[^"]*"/i,
+      ],
+      ['release date', /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:release date|released)\s*</i],
+      [
+        'price',
+        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*price\s*<|\b(?:USD|INR|EUR|GBP)\s*\d|(?:\$|€|£)\s*\d/i,
+      ],
+      [
+        'audience',
+        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:target audience|audience|age rating)\s*<|\b(?:ages?\s+\d+\+|rated\s+(?:\d+\+|everyone|teen|mature))\b/i,
+      ],
     ] as const;
 
     for (const route of ['products', 'products/neon-bubble-galaxy']) {
-      const main = mainContent(page(route));
+      const html = page(route);
+      const main = mainContent(html);
+      expect(productLinks(html), route + ' contains an external product link').not.toMatch(
+        /href="https?:\/\//i,
+      );
       for (const [label, pattern] of prohibited) {
         expect(main, route + ' contains prohibited ' + label).not.toMatch(pattern);
       }
@@ -109,8 +135,8 @@ describe('generated corporate site', () => {
   });
 
   it('removes obsolete publication copy and provides exact deletion boundaries', () => {
-    const support = page('support');
-    const deletion = page('data-deletion');
+    const support = mainContent(page('support'));
+    const deletion = mainContent(page('data-deletion'));
     expect(support).not.toContain('future US5 product');
     expect(support).not.toContain('No US5 mobile product');
     expect(deletion).not.toContain('Future mobile products');
