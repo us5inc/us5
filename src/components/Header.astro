@@ -2,39 +2,52 @@
 import Logo from './Logo.astro';
 import { withBase } from '../lib/urls';
 const links = [
-  ['About', '/about/'],
+  ['Products', '/products/'],
   ['Services', '/services/'],
   ['Digital Solutions', '/digital-solutions/'],
+  ['About', '/about/'],
   ['Contact', '/contact/'],
 ] as const;
+const current = Astro.url.pathname;
+const active = (path: string) => current === withBase(path) || current.startsWith(withBase(path));
 ---
 
 <header class="site-header">
   <div class="shell nav-wrap">
     <Logo /><button class="menu" type="button" aria-expanded="false" aria-controls="primary-nav"
-      ><span class="sr-only">Toggle navigation</span><span></span><span></span></button
+      ><span class="sr-only">Toggle navigation</span><span aria-hidden="true"></span><span
+        aria-hidden="true"></span></button
     ><nav id="primary-nav" aria-label="Primary navigation">
-      {links.map(([label, path]) => <a href={withBase(path)}>{label}</a>)}<a
-        class="button compact"
-        href={withBase('/contact/')}>Start a conversation</a
-      >
+      {
+        links.map(([label, path], index) => (
+          <a href={withBase(path)} aria-current={active(path) ? 'page' : undefined}>
+            <>
+              <span class="nav-index" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span>{label}</span>
+            </>
+          </a>
+        ))
+      }
     </nav>
   </div>
 </header>
 <script>
   const button = document.querySelector<HTMLButtonElement>('.menu');
   const nav = document.querySelector<HTMLElement>('#primary-nav');
-  const close = () => {
+  const close = (restoreFocus = false) => {
     button?.setAttribute('aria-expanded', 'false');
     nav?.classList.remove('open');
+    if (restoreFocus) button?.focus();
   };
   button?.addEventListener('click', () => {
     const open = button.getAttribute('aria-expanded') !== 'true';
     button.setAttribute('aria-expanded', String(open));
     nav?.classList.toggle('open', open);
   });
-  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', close));
+  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => close()));
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') close();
+    if (event.key === 'Escape' && button?.getAttribute('aria-expanded') === 'true') close(true);
   });
 </script>

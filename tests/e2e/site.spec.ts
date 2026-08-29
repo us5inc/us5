@@ -42,8 +42,23 @@ test('home navigation and mobile menu work', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Games that entertain');
   await page.getByRole('button', { name: 'Toggle navigation' }).click();
   await expect(page.getByRole('navigation')).toBeVisible();
+  const productsLink = page.getByRole('link', { name: 'Products' });
+  await productsLink.focus();
   await page.keyboard.press('Escape');
   await expect(page.getByRole('navigation')).not.toBeVisible();
+  await expect(page.getByRole('button', { name: 'Toggle navigation' })).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Toggle navigation' })).toHaveAttribute(
+    'aria-expanded',
+    'false',
+  );
+});
+test('navigation exposes the current route', async ({ page }) => {
+  await page.goto('./services/');
+  await expect(page.getByRole('link', { name: 'Services' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await expect(page.getByRole('link', { name: 'Products' })).toBeVisible();
 });
 test('focused buttons retain a dual high-contrast ring', async ({ page }) => {
   await page.goto(process.env.TASK1_BASE_URL ?? './');
