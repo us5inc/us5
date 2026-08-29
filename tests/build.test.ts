@@ -8,6 +8,18 @@ const page = (route: string) => readFileSync(join(root, 'dist', route, 'index.ht
 const mainContent = (html: string) => html.match(/<main[^>]*>(.*?)<\/main>/s)?.[1] ?? '';
 const productLinks = (html: string) =>
   html.match(/<nav class="product-links"[^>]*>(.*?)<\/nav>/s)?.[1] ?? '';
+const visibleCopy = (html: string) =>
+  html
+    .replace(/<(script|style)\b[^>]*>.*?<\/\1>/gis, '')
+    .replace(/<[^>]+>/g, '\n')
+    .split('\n')
+    .map((segment) => segment.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .join('\n');
+const productIcon = (html: string) =>
+  html
+    .match(/<img\b[^>]*>/gi)
+    ?.find((tag) => tag.includes('src="/us5/images/neon-bubble-galaxy.png"')) ?? '';
 
 describe('generated corporate site', () => {
   beforeAll(() => execFileSync('npm', ['run', 'build'], { cwd: root, stdio: 'pipe' }), 30_000);
@@ -76,7 +88,10 @@ describe('generated corporate site', () => {
       expect(main).toMatch(/<p[^>]*>\s*A mobile game published by US5 Incorporation\.\s*<\/p>/);
       expect(main).toMatch(/<dt[^>]*>Developer<\/dt><dd[^>]*>US5 Incorporation<\/dd>/);
       expect(main).toMatch(/<dt[^>]*>Category<\/dt><dd[^>]*>Mobile game<\/dd>/);
-      expect(main).toContain('src="/us5/images/neon-bubble-galaxy.png"');
+      const icon = productIcon(main);
+      expect(icon).toContain('src="/us5/images/neon-bubble-galaxy.png"');
+      expect(icon).toMatch(/\bwidth="512"/);
+      expect(icon).toMatch(/\bheight="512"/);
       expect(productLinks(html)).toContain('href="/us5/privacy/"');
       expect(productLinks(html)).toContain('href="/us5/support/"');
       expect(productLinks(html)).toContain('href="/us5/data-deletion/"');
@@ -86,50 +101,57 @@ describe('generated corporate site', () => {
   });
 
   it('omits unverified store metadata and marketing claims', () => {
-    const prohibited = [
-      [
-        'Play or App Store URL',
-        /href="https?:\/\/(?:play\.google\.com\/store\/apps|apps\.apple\.com\/[^"]*\/app\/)[^"]*"/i,
-      ],
-      [
-        'Play or App Store badge',
-        /(?:alt|aria-label|title)="[^"]*(?:Google Play|Play Store|App Store)[^"]*"/i,
-      ],
+    const prohibitedCopy = [
+      ['View on Google Play copy', /(?:^|\n)View on Google Play(?:\n|$)/i],
+      ['store listing copy', /(?:^|\n)(?:Google Play|Play Store|App Store)(?:\n|$)/i],
       [
         'package or application ID',
-        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:package(?:\s+name)?|application\s+ID)\s*</i,
+        /(?:^|\n)(?:package(?: name)?|application ID)(?:[ \t]*:[^\n]+)?(?:\n|$)|(?:\b[a-z][a-z0-9_-]*\.){2,}[a-z][a-z0-9_-]*\b/i,
       ],
       [
         'rating, review, or download metric',
-        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:ratings?|review count|download count|downloads?)\s*<|\b(?:\d(?:\.\d)?\s*(?:\/|out of)\s*5|\d[\d,.]*\+?\s+(?:ratings?|reviews?|downloads?))\b/i,
+        /(?:^|\n)(?:ratings?|review count|download count|downloads?)(?:[ \t]*:[^\n]+)?(?:\n|$)|\b(?:\d(?:\.\d)?[ \t]*(?:\/|out of)[ \t]*5|\d[\d,.]*\+?[ \t]+(?:ratings?|reviews?|downloads?))\b/i,
       ],
       [
         'feature or gameplay claim',
-        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:features?|highlights?|gameplay)\s*<|\b(?:features?|gameplay)\s*(?::|—|-)\s*\S|\b(?:features?|gameplay)\s+(?:include|includes|offers|lets|allows|delivers)\b/i,
+        /(?:^|\n)(?:features?|highlights?|gameplay)(?:\n|$)|\b(?:features?|gameplay)[ \t]*(?::|—|-)[ \t]*\S|\b(?:features?|gameplay)[ \t]+(?:include|includes|offers|lets|allows|delivers|provides)\b/i,
       ],
       [
         'screenshot',
-        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:screenshots?|gallery)\s*<|(?:alt|aria-label)="[^"]*\bscreenshot\b[^"]*"/i,
+        /(?:^|\n)(?:screenshots?|gallery)(?:\n|$)|\bscreenshots?[ \t]*(?::|—|-)[ \t]*\S/i,
       ],
-      ['release date', /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:release date|released)\s*</i],
+      [
+        'release date',
+        /(?:^|\n)(?:release date|released)(?:[ \t]*:[^\n]+)?(?:\n|$)|\breleased?[ \t]+(?:on|in)[ \t]+\S/i,
+      ],
       [
         'price',
-        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*price\s*<|\b(?:USD|INR|EUR|GBP)\s*\d|(?:\$|€|£)\s*\d/i,
+        /(?:^|\n)price(?:[ \t]*:[^\n]+)?(?:\n|$)|\b(?:USD|INR|EUR|GBP)[ \t]*\d|(?:\$|€|£)[ \t]*\d/i,
       ],
       [
         'audience',
-        /<(?:h[1-6]|dt|th|strong|b)\b[^>]*>\s*(?:target audience|audience|age rating)\s*<|\b(?:ages?\s+\d+\+|rated\s+(?:\d+\+|everyone|teen|mature))\b/i,
+        /(?:^|\n)(?:target audience|audience|age rating)(?:[ \t]*:[^\n]+)?(?:\n|$)|\b(?:ages?[ \t]+\d+\+|rated[ \t]+(?:\d+\+|everyone|teen|mature))\b/i,
       ],
     ] as const;
 
     for (const route of ['products', 'products/neon-bubble-galaxy']) {
       const html = page(route);
       const main = mainContent(html);
+      const copy = visibleCopy(main);
       expect(productLinks(html), route + ' contains an external product link').not.toMatch(
         /href="https?:\/\//i,
       );
-      for (const [label, pattern] of prohibited) {
-        expect(main, route + ' contains prohibited ' + label).not.toMatch(pattern);
+      expect(main, route + ' contains a Play or App Store URL').not.toMatch(
+        /https?:\/\/(?:play\.google\.com\/store\/apps|apps\.apple\.com\/[^"]*\/app\/)[^"<\s]*/i,
+      );
+      expect(main, route + ' contains a Play or App Store badge').not.toMatch(
+        /(?:alt|aria-label|title)="[^"]*(?:Google Play|Play Store|App Store)[^"]*"/i,
+      );
+      expect(main, route + ' contains a screenshot image').not.toMatch(
+        /(?:src|alt|aria-label)="[^"]*\bscreenshot\b[^"]*"/i,
+      );
+      for (const [label, pattern] of prohibitedCopy) {
+        expect(copy, route + ' contains prohibited ' + label).not.toMatch(pattern);
       }
     }
   });
