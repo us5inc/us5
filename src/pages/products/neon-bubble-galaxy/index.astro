@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { featuredProduct } from '../../../config/featured-product';
+import { withBase } from '../../../lib/urls';
+---
+
+<BaseLayout
+  title={featuredProduct.name}
+  description={featuredProduct.summary}
+  path={featuredProduct.productPath}
+  ><section class="product-hero">
+    <div class="shell product-layout">
+      <div class="product-copy">
+        <span class="eyebrow">{featuredProduct.status}</span><h1>{featuredProduct.name}</h1><p
+          class="lead"
+        >
+          {featuredProduct.summary}
+        </p><dl>
+          <div><dt>Developer</dt><dd>{featuredProduct.developer}</dd></div>
+          <div><dt>Category</dt><dd>{featuredProduct.category}</dd></div>
+          <div><dt>Status</dt><dd>{featuredProduct.status}</dd></div>
+        </dl><nav class="product-links" aria-label="Neon Bubble Galaxy resources">
+          <a href={withBase(featuredProduct.privacyPath)}>Privacy</a><a
+            href={withBase(featuredProduct.supportPath)}>Support</a
+          ><a href={withBase(featuredProduct.deletionPath)}>Data deletion</a>
+        </nav>
+      </div><div class="artwork">
+        <img
+          src={withBase(featuredProduct.icon)}
+          alt="Neon Bubble Galaxy game icon"
+          width="512"
+          height="512"
+        />
+      </div>
+    </div>
+  </section><section class="section alt">
+    <div class="shell resource-intro">
+      <span class="eyebrow">Verified resources</span><h2>Product information, kept direct.</h2><p>
+        Use the linked pages for current privacy disclosures, support, and data deletion
+        instructions.
+      </p>
+    </div>
+  </section></BaseLayout
+>
+
+<style>
+  .product-hero {
+    padding: clamp(4rem, 9vw, 8rem) 0;
+    overflow: hidden;
+    background: var(--midnight);
+    color: var(--white);
+  }
+  .product-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.7fr);
+    gap: clamp(3rem, 8vw, 7rem);
+    align-items: center;
+  }
+  .product-copy .eyebrow {
+    color: var(--paper);
+  }
+  .product-copy h1 {
+    margin: 1rem 0 1.5rem;
+    max-width: 12ch;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6.8rem);
+    font-weight: 650;
+    line-height: 0.92;
+    letter-spacing: -0.055em;
+  }
+  .product-copy .lead {
+    max-width: 36rem;
+    color: var(--paper);
+  }
+  .artwork {
+    padding: clamp(0.75rem, 2vw, 1.25rem);
+    border: 1px solid var(--line-light);
+  }
+  .artwork img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 18%;
+    box-shadow: 0 30px 80px rgb(0 0 0 / 36%);
+  }
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2.5rem;
+    margin: 2.25rem 0;
+  }
+  dl div {
+    min-width: 8rem;
+  }
+  dt {
+    font-family: var(--font-mono);
+    color: rgb(244 245 247 / 64%);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  dd {
+    margin: 0.25rem 0 0;
+    color: var(--white);
+    font-weight: 600;
+  }
+  .product-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line-light);
+  }
+  .product-links a {
+    color: var(--white);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  .resource-intro {
+    max-width: 760px;
+  }
+  .resource-intro h2 {
+    margin-bottom: 1rem;
+  }
+  .resource-intro p {
+    color: var(--ink-soft);
+    font-size: 1.08rem;
+  }
+  @media (max-width: 760px) {
+    .product-layout {
+      grid-template-columns: 1fr;
+    }
+    .artwork {
+      max-width: 24rem;
+    }
+  }
+</style>

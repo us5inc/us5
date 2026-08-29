@@ -63,9 +63,22 @@ describe('generated corporate site', () => {
     expect(social).toContain('#FFFFFF');
   });
 
-  it('does not publish a product claim while the catalog is empty', () => {
-    expect(page('products')).toContain('Our first releases are in development');
-    expect(page('products')).not.toContain('Google Play');
+  it('publishes Neon Bubble Galaxy without inventing store facts', () => {
+    const listing = page('products');
+    const product = page('products/neon-bubble-galaxy');
+    for (const html of [listing, product]) {
+      expect(html).toContain('Neon Bubble Galaxy');
+      expect(html).toContain('Published mobile game');
+      expect(html).not.toMatch(/coming soon|in development|downloads|rating/i);
+    }
+    expect(product).not.toContain('View on Google Play');
+    expect(product).toContain('/us5/privacy/');
+    expect(product).toContain('/us5/support/');
+  });
+
+  it('does not contradict the published product status', () => {
+    expect(page('support')).not.toMatch(/no .* product|future US5 product/i);
+    expect(page('data-deletion')).not.toMatch(/no .* product|future mobile products/i);
   });
 
   it('publishes the authorized AdMob seller record', () => {

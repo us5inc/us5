@@ -21,6 +21,7 @@ const required = [
   'terms/index.html',
   'data-deletion/index.html',
   'products/index.html',
+  'products/neon-bubble-galaxy/index.html',
   '404.html',
 ];
 for (const file of required) if (!existsSync(join(root, file))) errors.push(`Missing ${file}`);

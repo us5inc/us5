@@ -2,12 +2,113 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import Cta from '../../components/Cta.astro';
+import { featuredProduct } from '../../config/featured-product';
+import { withBase } from '../../lib/urls';
 ---
 
-<BaseLayout title="Products" description="Mobile products from US5 Incorporation." path="/products/"
+<BaseLayout
+  title="Products"
+  description="Published mobile products from US5 Incorporation."
+  path="/products/"
   ><PageHero
     eyebrow="Products"
-    title="Our first releases are in development."
-    intro="We are working carefully toward our first public mobile products. Verified product details and privacy information will appear here when a release is ready."
-  /><Cta /></BaseLayout
+    title="Published mobile experiences."
+    intro="Explore product information and direct support resources from US5 Incorporation."
+  /><section class="section alt">
+    <div class="shell">
+      <article class="product-card">
+        <img
+          src={withBase(featuredProduct.icon)}
+          alt="Neon Bubble Galaxy game icon"
+          width="512"
+          height="512"
+        /><div class="product-copy">
+          <span class="eyebrow">{featuredProduct.status}</span><h2>
+            <a href={withBase(featuredProduct.productPath)}>{featuredProduct.name}</a>
+          </h2><p>{featuredProduct.summary}</p><dl>
+            <div><dt>Developer</dt><dd>{featuredProduct.developer}</dd></div>
+            <div><dt>Category</dt><dd>{featuredProduct.category}</dd></div>
+          </dl><nav class="product-links" aria-label="Neon Bubble Galaxy resources">
+            <a href={withBase(featuredProduct.productPath)}>View product</a><a
+              href={withBase(featuredProduct.privacyPath)}>Privacy</a
+            ><a href={withBase(featuredProduct.supportPath)}>Support</a><a
+              href={withBase(featuredProduct.deletionPath)}>Data deletion</a
+            >
+          </nav>
+        </div>
+      </article>
+    </div>
+  </section><Cta /></BaseLayout
 >
+
+<style>
+  .product-card {
+    display: grid;
+    grid-template-columns: minmax(12rem, 24rem) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: center;
+    padding: clamp(1.25rem, 4vw, 3rem);
+    border: 1px solid var(--line-dark);
+    border-radius: 10px;
+    background: var(--white);
+  }
+  .product-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 18%;
+    box-shadow: 0 24px 60px rgb(10 14 26 / 18%);
+  }
+  .product-copy h2 {
+    margin: 0.75rem 0 1rem;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .product-copy > p {
+    max-width: 36rem;
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+  }
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2.5rem;
+    margin: 2rem 0;
+  }
+  dl div {
+    min-width: 9rem;
+  }
+  dt {
+    font-family: var(--font-mono);
+    color: var(--ink-faint);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  dd {
+    margin: 0.25rem 0 0;
+    font-weight: 600;
+  }
+  .product-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line-dark);
+  }
+  .product-links a {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  @media (max-width: 760px) {
+    .product-card {
+      grid-template-columns: 1fr;
+    }
+    .product-card img {
+      max-width: 18rem;
+    }
+  }
+</style>

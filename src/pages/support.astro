@@ -1,22 +1,28 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
+import { featuredProduct } from '../config/featured-product';
 import { siteConfig } from '../config/site';
+import { withBase } from '../lib/urls';
 ---
 
 <LegalLayout
   title="Support"
   description="Contact US5 Incorporation for website, product, and privacy support."
   path="/support/"
-  updated="28 August 2026"
+  updated="29 August 2026"
   ><h2>How we can help</h2><p>
-    For website questions, business enquiries, privacy requests, or support relating to a future US5
-    product, email <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
+    For support with <strong>{featuredProduct.name}</strong>, website questions, business enquiries,
+    or privacy requests, email <a href={'mailto:' + siteConfig.email}>{siteConfig.email}</a>.
   </p><h2>What to include</h2><p>
-    Describe the product or page involved, what you expected, and what happened. For privacy
-    requests, include enough information for us to identify the relevant correspondence or product
-    context, but do not send passwords or sensitive credentials.
+    Name the product or page involved, describe what you expected, and explain what happened. For
+    privacy requests, include enough information for us to identify the relevant correspondence or
+    product context, but do not send passwords or sensitive credentials.
   </p><h2>Product support</h2><p>
-    Product-specific support information will be published with each public release. No US5 mobile
-    product is currently listed on this website.
+    When contacting us about {featuredProduct.name}, include the device context and a concise
+    description of the issue. This verified email channel is the direct support route published by
+    US5 Incorporation.
+  </p><h2>Privacy support</h2><p>
+    Read the <a href={withBase(featuredProduct.privacyPath)}>privacy policy</a> for the game's current
+    disclosures, or email us with a specific question.
   </p></LegalLayout
 >
