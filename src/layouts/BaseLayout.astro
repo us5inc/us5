@@ -15,9 +15,9 @@ interface Props {
   description: string;
   path: string;
 }
-const { title, description, path } = Astro.props;
+const { description, path } = Astro.props;
 const canonical = absoluteUrl(path);
-const fullTitle = path === '/' ? 'US5 Inc.' : `${title} | ${siteConfig.name}`;
+const fullTitle = 'US5 Inc.';
 const organization = {
   '@context': 'https://schema.org',
   '@type': 'Organization',

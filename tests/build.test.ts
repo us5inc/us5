@@ -20,6 +20,7 @@ describe('generated corporate site', () => {
     'data-deletion',
   ])('generates the %s route with canonical metadata', (route) => {
     const html = page(route);
+    expect(html).toContain('<title>US5 Inc.</title>');
     expect(html).toContain(`<link rel="canonical" href="https://us5inc.github.io/us5/${route}/">`);
     expect(html).toContain('<meta name="description"');
   });
@@ -55,5 +56,16 @@ describe('generated corporate site', () => {
   it('publishes the authorized AdMob seller record', () => {
     const record = readFileSync(join(root, 'dist', 'app-ads.txt'), 'utf8').trim();
     expect(record).toBe('google.com, pub-9578601039790653, DIRECT, f08c47fec0942fa0');
+  });
+
+  it('publishes an app-specific privacy disclosure for Neon Bubble Galaxy', () => {
+    const html = page('privacy');
+    expect(html).toContain('Neon Bubble Galaxy');
+    expect(html).toContain('/us5/images/neon-bubble-galaxy.png');
+    expect(html).toContain('Google Mobile Ads SDK (AdMob)');
+    expect(html).toContain('Firebase Crashlytics');
+    expect(html).toContain('IP address');
+    expect(html).toContain('installation identifiers');
+    expect(html).toContain('does not sell personal data');
   });
 });
