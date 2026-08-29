@@ -33,8 +33,9 @@ a {
   color: inherit;
   text-decoration: none;
 }
-a:hover {
-  opacity: 0.72;
+a:not(.button):hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 button,
 input,
@@ -130,11 +131,6 @@ nav {
     transform 0.2s,
     background 0.2s;
 }
-.button:focus-visible {
-  outline: 3px solid var(--paper);
-  outline-offset: 4px;
-  box-shadow: 0 0 0 6px var(--midnight);
-}
 .button:hover {
   background: var(--midnight);
   border-color: var(--midnight);
@@ -148,6 +144,11 @@ nav {
 }
 .button.compact {
   padding: 9px 17px;
+}
+.button:focus-visible {
+  outline: 3px solid var(--paper);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px var(--midnight);
 }
 .menu {
   display: none;
