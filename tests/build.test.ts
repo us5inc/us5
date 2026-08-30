@@ -36,6 +36,14 @@ const productIcon = (html: string) =>
   html
     .match(/<img\b[^>]*>/gi)
     ?.find((tag) => tag.includes('src="/us5/images/neon-bubble-galaxy.png"')) ?? '';
+const expectedProcessSteps = [
+  [
+    'Define',
+    'Align the product, audience, constraints, and measure of success before complexity grows.',
+  ],
+  ['Build', 'Develop in focused increments with usability and performance considered throughout.'],
+  ['Refine', 'Test the complete experience, resolve friction, and prepare a responsible release.'],
+] as const;
 
 describe('generated corporate site', () => {
   beforeAll(() => execFileSync('npm', ['run', 'build'], { cwd: root, stdio: 'pipe' }), 30_000);
@@ -119,10 +127,12 @@ describe('generated corporate site', () => {
 
     const process = sectionByClass(html, 'manifesto-process');
     expect(process).toMatch(/<h2[^>]*>How we work<\/h2>[\s\S]*<ol class="process-rail">/);
-    expect(orderedListItems(process, 'process-rail')).toHaveLength(3);
-    for (const heading of ['Define', 'Build', 'Refine']) {
-      expect(process).toContain(`<h3>${heading}</h3>`);
-    }
+    const processSteps = orderedListItems(process, 'process-rail');
+    expect(processSteps).toHaveLength(3);
+    expectedProcessSteps.forEach(([heading, body], index) => {
+      expect(processSteps[index]).toContain(`<h3>${heading}</h3>`);
+      expect(processSteps[index]).toContain(`<p>${body}</p>`);
+    });
   });
 
   it('keeps all service capabilities and the approved delivery panel in semantic order', () => {
@@ -173,10 +183,12 @@ describe('generated corporate site', () => {
     expect(delivery).toContain(
       '<p>We connect product intent, interface design, engineering, testing, and delivery so each decision supports the experience as a whole.</p>',
     );
-    expect(orderedListItems(delivery, 'process-rail')).toHaveLength(3);
-    for (const heading of ['Define', 'Build', 'Refine']) {
-      expect(delivery).toContain(`<h3>${heading}</h3>`);
-    }
+    const processSteps = orderedListItems(delivery, 'process-rail');
+    expect(processSteps).toHaveLength(3);
+    expectedProcessSteps.forEach(([heading, body], index) => {
+      expect(processSteps[index]).toContain(`<h3>${heading}</h3>`);
+      expect(processSteps[index]).toContain(`<p>${body}</p>`);
+    });
   });
 
   it('keeps all digital system bands static and in semantic order', () => {
