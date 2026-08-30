@@ -1,5 +1,7 @@
 # US5 Incorporation Corporate Website Design
 
+> **Superseded in part:** The visual system and initial product-status sections in this document are superseded by `2026-08-29-us5-technical-luxury-redesign.md`. The remaining requirements and the historical text below are retained unchanged.
+
 ## Purpose
 
 Build a credible, fast corporate website for US5 Incorporation that presents its mobile-game, application-development, and digital-solution capabilities. The initial launch will not advertise unpublished products or make claims that cannot be verified. It will provide a structured path for adding future Google Play products and permanent privacy-policy URLs.

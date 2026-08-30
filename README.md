@@ -16,7 +16,10 @@ Use Node.js 22.22.3 or newer.
 npm ci
 npm run dev
 npm run check
+npm audit --audit-level=high
 ```
+
+`npm run check` runs Prettier, ESLint, strict Astro checking, Vitest, the production build, generated-link verification, and Playwright/axe browser tests. The individual checks are available as `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run verify:build`, and `npm run test:e2e`.
 
 `npm run build` writes the static site to `dist`. The default production base is `/us5/`. To build for a user-site repository or a configured custom domain, use `PUBLIC_SITE_BASE=/ npm run build`.
 
@@ -26,9 +29,13 @@ The workflow in `.github/workflows/deploy.yml` checks and deploys pushes to `mai
 
 For a custom domain, add the domain in **Settings → Pages**, configure the DNS records GitHub provides, add a `public/CNAME` file containing only that domain, and set `PUBLIC_SITE_BASE` to `/` in the workflow.
 
-## Adding a product
+## Featured product
 
-Add a validated entry to `src/config/products.ts`. The schema requires the real product name, slug, description, category, package name, Google Play URL, support email, dates, verified features, audience, direct collection, SDK processing, sharing, advertising, analytics, crash reporting, purchases, accounts, location, device identifiers, retention, security, rights, deletion process, and third-party provider links.
+`src/config/featured-product.ts` contains the verified public information used to feature Neon Bubble Galaxy on the website. Its dedicated route is `/products/neon-bubble-galaxy/`, with privacy, support, and data-deletion links supplied by the same configuration. There is no verified Google Play listing URL, so the website intentionally renders no Google Play button.
+
+## Adding a future store product
+
+The separate strict `Product` schema workflow remains unchanged for a future complete, verified store record. Add a validated entry to `src/config/products.ts`. The schema requires the real product name, slug, description, category, package name, Google Play URL, support email, dates, verified features, audience, direct collection, SDK processing, sharing, advertising, analytics, crash reporting, purchases, accounts, location, device identifiers, retention, security, rights, deletion process, and third-party provider links.
 
 The build then creates:
 
