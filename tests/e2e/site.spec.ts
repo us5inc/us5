@@ -52,6 +52,28 @@ test('home navigation and mobile menu work', async ({ page }) => {
     'false',
   );
 });
+test('home keeps one page heading and the featured product visible across breakpoints', async ({
+  page,
+}) => {
+  const pageHeading = page.getByRole('heading', { level: 1 });
+  const productHeading = page.getByRole('heading', { level: 2, name: 'Neon Bubble Galaxy' });
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./');
+  await expect(pageHeading).toHaveCount(1);
+  await expect(productHeading).toBeVisible();
+
+  await page.setViewportSize({ width: 320, height: 700 });
+  await expect(pageHeading).toHaveCount(1);
+  await expect(productHeading).toBeVisible();
+});
+test('home diagram settles immediately for reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('./');
+  const trace = page.locator('.hero-mark-trace');
+  await expect(trace).toHaveCSS('animation-name', 'none');
+  await expect(trace).toHaveCSS('stroke-dashoffset', '0px');
+});
 test('navigation exposes the current route', async ({ page }) => {
   await page.goto('./services/');
   await expect(page.getByRole('link', { name: 'Services' })).toHaveAttribute(

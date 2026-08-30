@@ -203,15 +203,14 @@ textarea {
   white-space: nowrap;
   border: 0;
 }
-.hero {
-  padding: 94px 0 86px;
-  overflow: hidden;
+.home-hero {
+  padding: clamp(56px, 8vh, 92px) 0;
+  overflow: clip;
   background: var(--midnight);
   color: var(--white);
   position: relative;
 }
-.eyebrow,
-.field-label {
+.eyebrow {
   font-family: var(--font-mono);
   color: var(--midnight);
   font-size: 0.7rem;
@@ -219,29 +218,39 @@ textarea {
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
-.hero .eyebrow {
+.home-hero .eyebrow {
   color: var(--paper);
 }
-.hero-grid {
+.home-hero-grid {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 76px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 64px);
   align-items: center;
   position: relative;
 }
-.hero h1 {
+.home-hero-copy {
+  grid-column: 1 / span 7;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+.home-hero h1 {
   font-family: var(--font-display);
-  font-size: clamp(2.9rem, 6.8vw, 5.4rem);
+  font-size: clamp(3rem, 6.2vw, 6rem);
   font-weight: 650;
-  line-height: 0.98;
-  letter-spacing: -0.045em;
+  line-height: 0.96;
+  letter-spacing: -0.05em;
   margin: 20px 0 26px;
-  max-width: 850px;
+  max-width: 12ch;
+}
+.home-hero h1 span {
+  color: var(--paper);
 }
 .lead {
   font-size: clamp(1.05rem, 2vw, 1.24rem);
   color: var(--paper);
   max-width: 650px;
+  margin-bottom: 0;
 }
 .actions {
   display: flex;
@@ -249,38 +258,48 @@ textarea {
   flex-wrap: wrap;
   margin-top: 34px;
 }
-.hero .button {
+.home-hero .button {
   background: var(--white);
   border-color: var(--white);
   color: var(--midnight) !important;
 }
-.hero .button:hover {
+.home-hero .button:hover {
   background: var(--paper);
   border-color: var(--paper);
 }
-.brand-field {
-  aspect-ratio: 1;
+.hero-mark {
+  display: block;
+  grid-column: 9 / -1;
+  width: min(100%, 460px);
+  height: auto;
+  justify-self: end;
+  color: var(--white);
+  background: var(--midnight);
   border: 1px solid var(--line-light);
-  background: var(--surface-dark);
-  display: grid;
-  place-items: center;
-  position: relative;
-  box-shadow: 0 24px 70px rgb(10 14 26 / 53%);
 }
-.brand-grid {
-  width: 74%;
-  position: relative;
-}
-.construction {
+.hero-mark-grid {
   fill: none;
-  stroke: var(--line-light);
-  stroke-width: 0.55;
+  stroke: currentColor;
+  stroke-width: 0.45;
+  stroke-opacity: 0.18;
 }
-.field-label {
-  position: absolute;
-  bottom: 22px;
-  color: rgb(255 255 255 / 48%);
-  font-size: 0.56rem;
+.hero-mark-trace {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: hero-mark-trace 1.4s cubic-bezier(0.65, 0, 0.35, 1) 180ms both;
+}
+.hero-mark-annotations {
+  fill: currentColor;
+  opacity: 0.52;
+  font-family: var(--font-mono);
+  font-size: 3.15px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+@keyframes hero-mark-trace {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 .section {
   padding: 88px 0;
@@ -709,6 +728,13 @@ textarea {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+@media (min-width: 801px) and (min-height: 720px) {
+  .home-hero {
+    min-height: calc(100svh - 68px);
+    display: grid;
+    align-items: center;
+  }
+}
 @media (max-width: 800px) {
   .menu {
     display: grid;
@@ -751,14 +777,20 @@ textarea {
     letter-spacing: 0.14em;
     color: var(--paper);
   }
-  .hero {
-    padding: 70px 0;
+  .home-hero {
+    padding: 60px 0;
   }
-  .hero-grid {
-    grid-template-columns: 1fr;
+  .home-hero-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    row-gap: 52px;
   }
-  .brand-field {
-    max-width: 420px;
+  .home-hero-copy {
+    grid-column: 1 / -1;
+  }
+  .hero-mark {
+    grid-column: 3 / span 4;
+    width: min(100%, 380px);
+    justify-self: center;
   }
   .grid {
     grid-template-columns: 1fr;
@@ -829,11 +861,25 @@ textarea {
   .shell {
     width: min(calc(100% - 28px), var(--max));
   }
-  .hero h1 {
-    font-size: 2.65rem;
+  .home-hero {
+    padding: 48px 0;
   }
-  .brand-field {
-    display: none;
+  .home-hero h1 {
+    font-size: clamp(2.4rem, 14vw, 3.05rem);
+  }
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .home-hero .button {
+    width: 100%;
+  }
+  .hero-mark {
+    grid-column: 1 / -1;
+    width: min(82vw, 280px);
+    justify-self: center;
   }
   .section {
     padding: 68px 0;
@@ -882,5 +928,9 @@ textarea {
   *:after {
     scroll-behavior: auto !important;
     transition: none !important;
+  }
+  .hero-mark-trace {
+    animation: none;
+    stroke-dashoffset: 0;
   }
 }

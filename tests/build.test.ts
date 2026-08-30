@@ -70,6 +70,7 @@ describe('generated corporate site', () => {
     expect(favicon).toContain('fill="#0A0E1A"');
     expect(favicon).toContain('stroke="#F4F5F7"');
     expect(favicon).not.toContain('linearGradient');
+    expect(html).not.toContain('brand-field');
     expect(html).not.toContain('M10 11v13');
   });
 
