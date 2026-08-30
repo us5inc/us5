@@ -16,8 +16,8 @@ const { product } = Astro.props;
     <span class="eyebrow">{product.category}</span><h1>{product.name}</h1><p>
       {product.description}
     </p><div class="actions">
-      <a class="button" href={product.playUrl}>View on Google Play</a><a
-        class="button secondary"
+      <a class="button button-dark" href={product.playUrl}>View on Google Play</a><a
+        class="button button-outline"
         href={withBase(`/products/${product.slug}/privacy/`)}>Privacy policy</a
       >
     </div>

@@ -7,6 +7,23 @@ export function getStaticPaths() {
 const { product } = Astro.props;
 const none = (items: unknown[]) =>
   items.length ? 'See the details below.' : 'None confirmed for this release.';
+const productPrivacySections = [
+  { id: 'introduction', label: '1. Introduction' },
+  { id: 'information-collected', label: '2. Information collected' },
+  { id: 'information-use', label: '3. How information is used' },
+  { id: 'advertising', label: '4. Advertising' },
+  { id: 'analytics-crash-reporting', label: '5. Analytics and crash reporting' },
+  { id: 'third-party-services', label: '6. Third-party services' },
+  { id: 'data-sharing', label: '7. Data sharing' },
+  { id: 'data-retention', label: '8. Data retention' },
+  { id: 'data-security', label: '9. Data security' },
+  { id: 'childrens-privacy', label: '10. Children’s privacy' },
+  { id: 'rights-choices', label: '11. User rights and choices' },
+  { id: 'data-deletion', label: '12. Data deletion' },
+  { id: 'international-processing', label: '13. International processing' },
+  { id: 'changes', label: '14. Changes' },
+  { id: 'contact', label: '15. Contact' },
+] as const;
 ---
 
 <LegalLayout
@@ -14,27 +31,28 @@ const none = (items: unknown[]) =>
   description={`Privacy information for ${product.name} by US5 Incorporation.`}
   path={`/products/${product.slug}/privacy/`}
   updated={product.updatedDate}
-  ><h2>1. Introduction</h2><p>
+  sections={productPrivacySections}
+  ><h2 id="introduction">1. Introduction</h2><p>
     This policy explains how {product.developer} handles information in {product.name} ({
       product.packageName
     }). Effective {product.effectiveDate}.
-  </p><h2>2. Information collected</h2><p>
+  </p><h2 id="information-collected">2. Information collected</h2><p>
     Direct collection: {none(product.directCollection)} Third-party SDK processing: {
       none(product.sdkProcessing)
     }
-  </p><h2>3. How information is used</h2><p>
+  </p><h2 id="information-use">3. How information is used</h2><p>
     Information is used only for the purposes listed in this verified product configuration.
-  </p><h2>4. Advertising</h2><p>
+  </p><h2 id="advertising">4. Advertising</h2><p>
     {
       product.advertising
         ? 'Advertising services are enabled as described by the providers below.'
         : 'Advertising is not enabled.'
     }
-  </p><h2>5. Analytics and crash reporting</h2><p>
+  </p><h2 id="analytics-crash-reporting">5. Analytics and crash reporting</h2><p>
     Analytics: {product.analytics ? 'enabled' : 'not enabled'}. Crash reporting: {
       product.crashReporting ? 'enabled' : 'not enabled'
     }.
-  </p><h2>6. Third-party services</h2><ul>
+  </p><h2 id="third-party-services">6. Third-party services</h2><ul>
     {
       product.providers.map((item) => (
         <li>
@@ -42,22 +60,34 @@ const none = (items: unknown[]) =>
         </li>
       ))
     }
-  </ul><h2>7. Data sharing</h2><p>{none(product.sharing)}</p><h2>8. Data retention</h2><p>
+  </ul><h2 id="data-sharing">7. Data sharing</h2><p>{none(product.sharing)}</p><h2
+    id="data-retention"
+  >
+    8. Data retention
+  </h2><p>
     {product.retention}
-  </p><h2>9. Data security</h2><p>{product.security}</p><h2>10. Children’s privacy</h2><p>
+  </p><h2 id="data-security">9. Data security</h2><p>{product.security}</p><h2
+    id="childrens-privacy"
+  >
+    10. Children’s privacy
+  </h2><p>
     {
       product.children
         ? 'This product is intended for children; the configured practices must be reviewed for the applicable audience.'
         : 'This product is not identified as intended for children.'
     }
-  </p><h2>11. User rights and choices</h2><p>{product.rights}</p><h2>12. Data deletion</h2><p>
+  </p><h2 id="rights-choices">11. User rights and choices</h2><p>{product.rights}</p><h2
+    id="data-deletion"
+  >
+    12. Data deletion
+  </h2><p>
     {product.deletion}
-  </p><h2>13. International processing</h2><p>
+  </p><h2 id="international-processing">13. International processing</h2><p>
     Service providers may process information where they operate, subject to their safeguards and
     applicable requirements.
-  </p><h2>14. Changes</h2><p>
+  </p><h2 id="changes">14. Changes</h2><p>
     Material changes will be reflected by the updated date on this policy.
-  </p><h2>15. Contact</h2><p>
+  </p><h2 id="contact">15. Contact</h2><p>
     <a href={`mailto:${product.supportEmail}`}>{product.supportEmail}</a>
   </p></LegalLayout
 >

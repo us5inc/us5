@@ -11,7 +11,11 @@ const renderedContrast = (locator: Locator) =>
     };
     const style = getComputedStyle(element);
     const foreground = parseColor(style.color);
-    const background = parseColor(getComputedStyle(document.body).backgroundColor);
+    const ownBackground = parseColor(style.backgroundColor);
+    const background =
+      ownBackground[3] > 0
+        ? ownBackground
+        : parseColor(getComputedStyle(document.body).backgroundColor);
     const alpha = foreground[3] * Number(style.opacity);
     const composite = (index: 0 | 1 | 2) =>
       foreground[index] * alpha + background[index] * (1 - alpha);
@@ -125,6 +129,22 @@ test('focused secondary buttons retain the dual ring on light surfaces', async (
     outlineWidth: '3px',
     boxShadow: 'rgb(10, 14, 26) 0px 0px 0px 6px',
   });
+});
+test('404 actions remain visible and accessible on the light hero', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto(`${process.env.TASK1_BASE_URL ?? './'}404.html`);
+
+  const returnHome = page.getByRole('link', { name: 'Return home' });
+  const contact = page.getByRole('link', { name: 'Contact US5' });
+  await expect(returnHome).toBeVisible();
+  await expect(contact).toBeVisible();
+  await expect(returnHome).toHaveText('Return home');
+  await expect(contact).toHaveText('Contact US5');
+  expect(await renderedContrast(returnHome)).toBeGreaterThanOrEqual(4.5);
+  expect(await renderedContrast(contact)).toBeGreaterThanOrEqual(4.5);
+
+  const result = await new AxeBuilder({ page }).analyze();
+  expect(result.violations.filter((item) => item.id === 'color-contrast')).toEqual([]);
 });
 test('header navigation hover keeps normal-text contrast', async ({ page }) => {
   await page.goto(process.env.TASK1_BASE_URL ?? './');

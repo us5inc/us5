@@ -373,4 +373,20 @@ describe('generated corporate site', () => {
     expect(html).toContain('installation identifiers');
     expect(html).toContain('does not sell personal data');
   });
+
+  it('publishes stable legal navigation without weakening product disclosures', () => {
+    const privacy = mainContent(page('privacy'));
+    const contents =
+      privacy.match(/<nav\b(?=[^>]*aria-label="On this page")[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? '';
+
+    for (const id of ['scope', 'game-data', 'sharing-retention', 'choices', 'contact']) {
+      expect(contents).toContain(`href="#${id}"`);
+      expect(privacy).toMatch(new RegExp(`<h2\\b[^>]*\\bid="${id}"[^>]*>`));
+    }
+    expect(privacy).toContain('Google Mobile Ads SDK (AdMob)');
+    expect(privacy).toContain('Firebase Crashlytics');
+
+    expect(mainContent(page('support'))).toContain('Neon Bubble Galaxy');
+    expect(mainContent(page('data-deletion'))).toContain('Neon Bubble Galaxy');
+  });
 });

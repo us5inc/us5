@@ -3,6 +3,13 @@ import LegalLayout from '../layouts/LegalLayout.astro';
 import { featuredProduct } from '../config/featured-product';
 import { siteConfig } from '../config/site';
 import { withBase } from '../lib/urls';
+const deletionSections = [
+  { id: 'product-data', label: 'Neon Bubble Galaxy' },
+  { id: 'email-correspondence', label: 'Email correspondence held by US5' },
+  { id: 'what-to-include', label: 'What to include' },
+  { id: 'google-processing', label: 'Google service processing' },
+  { id: 'what-happens-next', label: 'What happens next' },
+] as const;
 ---
 
 <LegalLayout
@@ -10,25 +17,26 @@ import { withBase } from '../lib/urls';
   description="How to request deletion of information associated with US5 Incorporation correspondence or products."
   path="/data-deletion/"
   updated="29 August 2026"
-  ><h2>{featuredProduct.name}</h2><p>
+  sections={deletionSections}
+  ><h2 id="product-data">{featuredProduct.name}</h2><p>
     {featuredProduct.name} does not provide a US5 account or saved profile. As a result, US5 does not
     operate an in-game account or saved-profile deletion process.
-  </p><h2>Email correspondence held by US5</h2><p>
+  </p><h2 id="email-correspondence">Email correspondence held by US5</h2><p>
     If you emailed US5 Incorporation and want the related correspondence reviewed for deletion,
     email <a href={'mailto:' + siteConfig.email + '?subject=Data%20deletion%20request'}
       >{siteConfig.email}</a
     > with the subject “Data deletion request.”
-  </p><h2>What to include</h2><p>
+  </p><h2 id="what-to-include">What to include</h2><p>
     Provide the email address used, approximate date, and enough context to locate the
     correspondence. Do not include passwords or sensitive credentials. We may need to verify that
     you control the relevant email address.
-  </p><h2>Google service processing</h2><p>
+  </p><h2 id="google-processing">Google service processing</h2><p>
     Google controls information processed through AdMob and Firebase Crashlytics under its own
     policies and service settings. A correspondence deletion request sent to US5 does not delete
     information in those services, and US5 cannot promise deletion from third-party systems it does
     not control. Read the <a href={withBase(featuredProduct.privacyPath)}>privacy policy</a> for the distinction
     between US5 correspondence and this Google-controlled processing.
-  </p><h2>What happens next</h2><p>
+  </p><h2 id="what-happens-next">What happens next</h2><p>
     We will review a correspondence request and explain the action taken. Some information may need
     to be retained where reasonably necessary for security, legal obligations, dispute resolution,
     or legitimate record keeping.

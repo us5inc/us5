@@ -5,6 +5,7 @@ export function getStaticPaths() {
   return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
 }
 const { product } = Astro.props;
+const productDeletionSections = [{ id: 'request-deletion', label: 'Request deletion' }] as const;
 ---
 
 <LegalLayout
@@ -12,7 +13,8 @@ const { product } = Astro.props;
   description={`Data deletion instructions for ${product.name}.`}
   path={`/products/${product.slug}/data-deletion/`}
   updated={product.updatedDate}
-  ><h2>Request deletion</h2><p>{product.deletion}</p><p>
+  sections={productDeletionSections}
+  ><h2 id="request-deletion">Request deletion</h2><p>{product.deletion}</p><p>
     Contact <a href={`mailto:${product.supportEmail}`}>{product.supportEmail}</a> and identify the product
     and relevant account or device context without sending passwords.
   </p></LegalLayout
