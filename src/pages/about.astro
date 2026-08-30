@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import ProcessRail from '../components/ProcessRail.astro';
 import Cta from '../components/Cta.astro';
 ---
 
@@ -12,17 +13,40 @@ import Cta from '../components/Cta.astro';
     eyebrow="About US5"
     title="Purposeful experiences, built end to end."
     intro="US5 Incorporation develops mobile games, applications, and digital solutions with close attention to the people who will use them."
-  /><section class="prose shell">
-    <h2>Product thinking meets careful execution</h2><p>
-      Good software begins with a clear reason to exist. We work from the intended experience and
-      business outcome, then connect design and engineering decisions to that purpose.
-    </p><h2>A complete delivery approach</h2><p>
-      Our process moves through definition, interaction design, development, testing, and release
-      preparation. Each stage is an opportunity to remove uncertainty and improve the whole
-      product—not simply complete a checklist.
-    </p><h2>Responsible by design</h2><p>
-      Performance, usability, privacy, and maintainability are product concerns. We consider them
-      throughout delivery so the result is easier to use, support, and evolve.
-    </p>
+  /><section
+    class="section manifesto-section"
+    data-page-system="manifesto"
+    aria-label="US5 principles"
+  >
+    <div class="shell">
+      <ol class="manifesto-principles">
+        <li>
+          <span class="manifesto-number" aria-hidden="true">01</span><div class="manifesto-copy">
+            <h2>Product thinking meets careful execution</h2><p>
+              Good software begins with a clear reason to exist. We work from the intended
+              experience and business outcome, then connect design and engineering decisions to that
+              purpose.
+            </p>
+          </div>
+        </li><li>
+          <span class="manifesto-number" aria-hidden="true">02</span><div class="manifesto-copy">
+            <h2>A complete delivery approach</h2><p>
+              Our process moves through definition, interaction design, development, testing, and
+              release preparation. Each stage is an opportunity to remove uncertainty and improve
+              the whole product—not simply complete a checklist.
+            </p>
+          </div>
+        </li><li>
+          <span class="manifesto-number" aria-hidden="true">03</span><div class="manifesto-copy">
+            <h2>Responsible by design</h2><p>
+              Performance, usability, privacy, and maintainability are product concerns. We consider
+              them throughout delivery so the result is easier to use, support, and evolve.
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section><section class="section manifesto-process" aria-label="Define, build, and refine">
+    <div class="shell"><ProcessRail /></div>
   </section><Cta /></BaseLayout
 >

@@ -34,19 +34,27 @@ const items = [
     eyebrow="Beyond games"
     title="Digital products that make work flow better."
     intro="We apply the same care for interaction and performance to practical software for organizations and their customers."
-  /><section class="section">
-    <div class="shell grid">
+  /><section
+    class="system-bands-section"
+    data-page-system="system-bands"
+    aria-label="Digital solutions"
+  >
+    <ol class="system-bands">
       {
         items.map(([title, body], i) => (
-          <article class="card">
-            <>
-              <span class="index">{String(i + 1).padStart(2, '0')}</span>
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </>
-          </article>
+          <li class="system-band">
+            <div class="shell system-band-grid">
+              <div class="system-band-index" aria-hidden="true">
+                <span class="technical-index">{String(i + 1).padStart(2, '0')}</span>
+              </div>
+              <div class="system-band-copy">
+                <h2>{title}</h2>
+                <p>{body}</p>
+              </div>
+            </div>
+          </li>
         ))
       }
-    </div>
+    </ol>
   </section><Cta /></BaseLayout
 >

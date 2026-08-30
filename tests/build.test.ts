@@ -61,6 +61,44 @@ describe('generated corporate site', () => {
     expect(home).not.toMatch(/class="[^"]*\bcard\b[^"]*"/);
   });
 
+  it('renders distinct card-free marketing route systems without dropping approved headings', () => {
+    const routes = [
+      ['about', 'manifesto'],
+      ['services', 'capability-ledger'],
+      ['digital-solutions', 'system-bands'],
+    ] as const;
+
+    for (const [route, system] of routes) {
+      const content = mainContent(page(route));
+      expect(content, route).toContain(`data-page-system="${system}"`);
+      expect(content, route).not.toMatch(/class="[^"]*\bcard\b[^"]*"/);
+    }
+
+    const services = mainContent(page('services'));
+    for (const heading of [
+      'Mobile game development',
+      'Android &amp; cross-platform apps',
+      'UI/UX design',
+      'Custom digital solutions',
+      'Product modernization',
+      'Quality &amp; performance',
+      'Maintenance &amp; support',
+    ]) {
+      expect(services).toContain(heading);
+    }
+
+    const digitalSolutions = mainContent(page('digital-solutions'));
+    for (const heading of [
+      'Custom mobile applications',
+      'Business workflow solutions',
+      'API integrations',
+      'Cloud-connected systems',
+      'Product consulting &amp; modernization',
+    ]) {
+      expect(digitalSolutions).toContain(heading);
+    }
+  });
+
   it('uses the approved Pattern 1A identity', () => {
     const html = page('');
     const favicon = readFileSync(join(root, 'dist', 'favicon.svg'), 'utf8');

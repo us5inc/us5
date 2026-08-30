@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import CapabilityLedger from '../components/CapabilityLedger.astro';
+import ProcessRail from '../components/ProcessRail.astro';
+import TechnicalSection from '../components/TechnicalSection.astro';
 import Cta from '../components/Cta.astro';
 import { services } from '../config/services';
 ---
@@ -13,19 +16,21 @@ import { services } from '../config/services';
     eyebrow="Services"
     title="Capabilities shaped around outcomes."
     intro="Choose focused support for one product stage or connect the full journey from concept through ongoing improvement."
-  /><section class="section">
-    <div class="shell grid">
-      {
-        services.map(([title, body], i) => (
-          <article class="card">
-            <>
-              <span class="index">{String(i + 1).padStart(2, '0')}</span>
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </>
-          </article>
-        ))
-      }
+  /><section
+    class="section services-ledger"
+    data-page-system="capability-ledger"
+    aria-label="Services"
+  >
+    <div class="shell">
+      <CapabilityLedger items={services} />
     </div>
-  </section><Cta /></BaseLayout
+  </section><TechnicalSection
+    figure="01"
+    label="How we work"
+    title="Clarity at every stage."
+    intro="We connect product intent, interface design, engineering, testing, and delivery so each decision supports the experience as a whole."
+    tone="dark"
+  >
+    <ProcessRail />
+  </TechnicalSection><Cta /></BaseLayout
 >
