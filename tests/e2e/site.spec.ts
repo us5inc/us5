@@ -77,6 +77,18 @@ test('home diagram settles immediately for reduced motion', async ({ page }) => 
   const trace = page.locator('.hero-mark-trace');
   await expect(trace).toHaveCSS('animation-name', 'none');
   await expect(trace).toHaveCSS('stroke-dashoffset', '0px');
+  await expect(page.getByRole('heading', { name: 'Neon Bubble Galaxy' })).toBeVisible();
+});
+test('key routes do not overflow at 320 pixels', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  for (const route of ['./', './products/', './contact/', './privacy/']) {
+    await page.goto(route);
+    const widths = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      content: document.documentElement.scrollWidth,
+    }));
+    expect(widths.content, `${route} should fit the viewport`).toBeLessThanOrEqual(widths.viewport);
+  }
 });
 test('navigation exposes the current route', async ({ page }) => {
   await page.goto('./services/');
@@ -243,12 +255,32 @@ test('contact explains and validates email fallback', async ({ page }) => {
   await expect(summary).toHaveAttribute('aria-invalid', 'true');
   await expect(consent).toHaveAttribute('aria-invalid', 'false');
 });
-test('key pages have no serious accessibility violations', async ({ page }) => {
-  for (const route of ['./', './services/', './contact/', './privacy/']) {
+test('key pages and the open mobile menu have no serious accessibility violations', async ({
+  page,
+}) => {
+  for (const route of [
+    './',
+    './products/',
+    './products/neon-bubble-galaxy/',
+    './services/',
+    './contact/',
+    './privacy/',
+  ]) {
     await page.goto(route);
     const result = await new AxeBuilder({ page }).analyze();
     expect(
       result.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? '')),
+      `${route} should have no serious or critical violations`,
     ).toEqual([]);
   }
+
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto('./');
+  await page.getByRole('button', { name: 'Toggle navigation' }).click();
+  await expect(page.getByRole('navigation')).toBeVisible();
+  const menuResult = await new AxeBuilder({ page }).analyze();
+  expect(
+    menuResult.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? '')),
+    'open mobile menu should have no serious or critical violations',
+  ).toEqual([]);
 });

@@ -4,6 +4,7 @@ dist/
 .astro/
 playwright-report/
 test-results/
+artifacts/visual-review/
 .env
 .env.*
 !.env.example
