@@ -65,7 +65,15 @@ describe('generated corporate site', () => {
     const html = page('');
     const favicon = readFileSync(join(root, 'dist', 'favicon.svg'), 'utf8');
     const approvedPath = 'M64 26 H34 V60 A26 26 0 0 0 86 60 V42';
-    expect(html).toContain(approvedPath);
+    const heroTraces =
+      html.match(/<path\b(?=[^>]*\bclass="[^"]*\bhero-mark-trace\b[^"]*")[^>]*>/g) ?? [];
+    expect(heroTraces).toHaveLength(1);
+    const [heroTrace = ''] = heroTraces;
+    expect(heroTrace).toContain(`d="${approvedPath}"`);
+    expect(heroTrace).toContain('stroke="#F4F5F7"');
+    expect(heroTrace).toContain('stroke-width="14"');
+    expect(heroTrace).toContain('stroke-linecap="round"');
+    expect(heroTrace).toContain('stroke-linejoin="round"');
     expect(favicon).toContain(approvedPath);
     expect(favicon).toContain('fill="#0A0E1A"');
     expect(favicon).toContain('stroke="#F4F5F7"');
