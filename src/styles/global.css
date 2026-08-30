@@ -755,6 +755,65 @@ textarea {
   color: var(--ink-soft);
   font-size: 0.92rem;
 }
+.contact-layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+.contact-brief {
+  grid-column: 1 / span 3;
+  border-block: 1px solid var(--line-dark);
+}
+.contact-brief p {
+  margin: 0;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line-dark);
+  color: var(--ink-soft);
+}
+.contact-brief p:last-child {
+  border-bottom: 0;
+}
+.contact-brief a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+}
+.contact-form-panel {
+  grid-column: 5 / -1;
+  min-width: 0;
+  padding: clamp(24px, 4vw, 52px);
+  background: var(--surface-light);
+  border: 1px solid var(--line-dark);
+}
+.contact-form-panel form {
+  max-width: none;
+}
+.contact-form-panel .button {
+  justify-self: start;
+}
+#form-status:empty {
+  display: none;
+}
+[data-error] {
+  display: block;
+}
+[data-error]:not(:empty) {
+  padding-left: 10px;
+  border-left: 2px solid var(--midnight);
+  font-weight: 600;
+}
+.field :is(input, select, textarea)[aria-invalid='true'] {
+  border-width: 2px;
+  border-color: var(--midnight);
+  box-shadow: inset 4px 0 0 var(--midnight);
+}
+.check input[aria-invalid='true'] {
+  outline: 2px solid var(--midnight);
+  outline-offset: 3px;
+}
 .site-footer {
   border-top: 1px solid var(--line-light);
   padding: 0;
@@ -964,6 +1023,14 @@ textarea {
   .cta > .button {
     grid-column: 1 / -1;
     justify-self: start;
+  }
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .contact-brief,
+  .contact-form-panel {
+    grid-column: 1;
   }
 }
 @media (max-width: 480px) {

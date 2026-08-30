@@ -13,12 +13,17 @@ import { siteConfig } from '../config/site';
     eyebrow="Start a conversation"
     title="Tell us what you want to move forward."
     intro="Share the goal, the audience, and where your product stands today. Your email application will prepare the message for you."
-  /><section class="section">
-    <div class="shell">
-      <EnquiryForm /><p class="form-note">
-        Prefer to write directly? Email <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a
-        >.
-      </p>
+  /><section class="section contact-section">
+    <div class="shell contact-layout">
+      <aside class="contact-brief" aria-label="Contact briefing">
+        <p>
+          Prefer to write directly? Email <a href={`mailto:${siteConfig.email}`}
+            >{siteConfig.email}</a
+          >.
+        </p>
+        <p id="contact-process">Your email application will open with a prepared message.</p>
+        <p id="contact-privacy">Nothing is stored by this website.</p>
+      </aside><div class="contact-form-panel"><EnquiryForm /></div>
     </div>
   </section></BaseLayout
 >

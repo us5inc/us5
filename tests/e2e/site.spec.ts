@@ -143,11 +143,85 @@ test('form instructions meet normal-text contrast', async ({ page }) => {
 
   expect(contrast).toBeGreaterThanOrEqual(4.5);
 });
+test('contact briefing and form panel reflow without horizontal overflow', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('./contact/');
+  const brief = page.locator('.contact-brief');
+  const panel = page.locator('.contact-form-panel');
+  const directEmail = brief.getByRole('link', { name: 'usfiveincorporation@gmail.com' });
+
+  await expect(brief).toContainText('Your email application will open with a prepared message.');
+  await expect(brief).toContainText('Nothing is stored by this website.');
+  await expect(directEmail).toHaveAttribute('href', 'mailto:usfiveincorporation@gmail.com');
+  const desktopBrief = await brief.boundingBox();
+  const desktopPanel = await panel.boundingBox();
+  expect(desktopBrief).not.toBeNull();
+  expect(desktopPanel).not.toBeNull();
+  expect(desktopBrief!.x).toBeLessThan(desktopPanel!.x);
+
+  await page.setViewportSize({ width: 320, height: 700 });
+  const mobileBrief = await brief.boundingBox();
+  const mobilePanel = await panel.boundingBox();
+  expect(mobileBrief).not.toBeNull();
+  expect(mobilePanel).not.toBeNull();
+  expect(mobileBrief!.y).toBeLessThan(mobilePanel!.y);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+});
 test('contact explains and validates email fallback', async ({ page }) => {
   await page.goto('./contact/');
   await expect(page.getByText('Nothing is stored by this website.')).toBeVisible();
+  const name = page.getByLabel('Name');
+  const email = page.getByLabel('Email');
+  const service = page.getByLabel('Service required');
+  const summary = page.getByLabel('Project summary');
+  const consent = page.getByLabel(/I agree that US5 Incorporation/);
   await page.getByRole('button', { name: 'Prepare email enquiry' }).click();
   await expect(page.getByText('Please correct the highlighted fields.')).toBeVisible();
+  await expect(name).toBeFocused();
+  await expect(name).toHaveAttribute('aria-invalid', 'true');
+  await expect(name).toHaveAttribute('aria-describedby', 'name-error');
+  await expect(page.locator('#name-error')).not.toBeEmpty();
+  await expect(page.locator('#name-error')).not.toHaveAttribute('style', /color/i);
+  await expect(name).toHaveCSS('border-left-width', '2px');
+  await expect(page.locator('#name-error')).toHaveCSS('border-left-width', '2px');
+  await expect(consent).toHaveCSS('outline-width', '2px');
+  for (const [control, errorId] of [
+    [email, 'email-error'],
+    [service, 'service-error'],
+    [summary, 'summary-error'],
+    [consent, 'consent-error'],
+  ] as const) {
+    await expect(control).toHaveAttribute('aria-invalid', 'true');
+    await expect(control).toHaveAttribute('aria-describedby', errorId);
+    await expect(page.locator(`#${errorId}`)).not.toBeEmpty();
+  }
+
+  await name.fill('Ada Lovelace');
+  await page.getByRole('button', { name: 'Prepare email enquiry' }).click();
+  await expect(name).toHaveAttribute('aria-invalid', 'false');
+  await expect(email).toBeFocused();
+
+  await email.fill('ada@example.com');
+  await service.selectOption('UI/UX design');
+  await summary.fill('Please help us improve a focused mobile product experience.');
+  await page.getByRole('button', { name: 'Prepare email enquiry' }).click();
+
+  for (const control of [name, email, service, summary]) {
+    await expect(control).toHaveAttribute('aria-invalid', 'false');
+  }
+  await expect(consent).toBeFocused();
+  await expect(consent).toHaveAttribute('aria-invalid', 'true');
+  await expect(consent).toHaveAttribute('aria-describedby', 'consent-error');
+  await expect(page.locator('#consent-error')).not.toBeEmpty();
+
+  await consent.check();
+  await summary.fill('');
+  await page.getByRole('button', { name: 'Prepare email enquiry' }).click();
+  await expect(summary).toBeFocused();
+  await expect(summary).toHaveAttribute('aria-invalid', 'true');
+  await expect(consent).toHaveAttribute('aria-invalid', 'false');
 });
 test('key pages have no serious accessibility violations', async ({ page }) => {
   for (const route of ['./', './services/', './contact/', './privacy/']) {
