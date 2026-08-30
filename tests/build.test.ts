@@ -6,6 +6,22 @@ import { beforeAll, describe, expect, it } from 'vitest';
 const root = process.cwd();
 const page = (route: string) => readFileSync(join(root, 'dist', route, 'index.html'), 'utf8');
 const mainContent = (html: string) => html.match(/<main[^>]*>(.*?)<\/main>/s)?.[1] ?? '';
+const sectionByClass = (html: string, className: string) =>
+  mainContent(html).match(
+    new RegExp(
+      `<section\\b(?=[^>]*\\bclass="[^"]*\\b${className}\\b[^"]*")[^>]*>[\\s\\S]*?<\\/section>`,
+    ),
+  )?.[0] ?? '';
+const pageSystemRegion = (html: string, system: string) =>
+  mainContent(html).match(
+    new RegExp(`<section\\b(?=[^>]*\\bdata-page-system="${system}")[^>]*>[\\s\\S]*?<\\/section>`),
+  )?.[0] ?? '';
+const orderedListItems = (html: string, className: string) => {
+  const list = html.match(
+    new RegExp(`<ol\\b(?=[^>]*\\bclass="[^"]*\\b${className}\\b[^"]*")[^>]*>([\\s\\S]*?)<\\/ol>`),
+  )?.[1];
+  return list?.match(/<li\b[^>]*>[\s\S]*?<\/li>/g) ?? [];
+};
 const productLinks = (html: string) =>
   html.match(/<nav class="product-links"[^>]*>(.*?)<\/nav>/s)?.[1] ?? '';
 const visibleCopy = (html: string) =>
@@ -61,7 +77,7 @@ describe('generated corporate site', () => {
     expect(home).not.toMatch(/class="[^"]*\bcard\b[^"]*"/);
   });
 
-  it('renders distinct card-free marketing route systems without dropping approved headings', () => {
+  it('renders distinct card-free marketing route systems', () => {
     const routes = [
       ['about', 'manifesto'],
       ['services', 'capability-ledger'],
@@ -73,30 +89,129 @@ describe('generated corporate site', () => {
       expect(content, route).toContain(`data-page-system="${system}"`);
       expect(content, route).not.toMatch(/class="[^"]*\bcard\b[^"]*"/);
     }
+  });
 
-    const services = mainContent(page('services'));
-    for (const heading of [
-      'Mobile game development',
-      'Android &amp; cross-platform apps',
-      'UI/UX design',
-      'Custom digital solutions',
-      'Product modernization',
-      'Quality &amp; performance',
-      'Maintenance &amp; support',
-    ]) {
-      expect(services).toContain(heading);
-    }
+  it('keeps the complete About manifesto and process hierarchy in semantic order', () => {
+    const html = page('about');
+    const manifesto = pageSystemRegion(html, 'manifesto');
+    const principles = orderedListItems(manifesto, 'manifesto-principles');
+    const expectedPrinciples = [
+      [
+        'Product thinking meets careful execution',
+        'Good software begins with a clear reason to exist. We work from the intended experience and business outcome, then connect design and engineering decisions to that purpose.',
+      ],
+      [
+        'A complete delivery approach',
+        'Our process moves through definition, interaction design, development, testing, and release preparation. Each stage is an opportunity to remove uncertainty and improve the whole product—not simply complete a checklist.',
+      ],
+      [
+        'Responsible by design',
+        'Performance, usability, privacy, and maintainability are product concerns. We consider them throughout delivery so the result is easier to use, support, and evolve.',
+      ],
+    ] as const;
 
-    const digitalSolutions = mainContent(page('digital-solutions'));
-    for (const heading of [
-      'Custom mobile applications',
-      'Business workflow solutions',
-      'API integrations',
-      'Cloud-connected systems',
-      'Product consulting &amp; modernization',
-    ]) {
-      expect(digitalSolutions).toContain(heading);
+    expect(manifesto).toContain('<ol class="manifesto-principles">');
+    expect(principles).toHaveLength(3);
+    expectedPrinciples.forEach(([heading, body], index) => {
+      expect(principles[index]).toContain(`<h2>${heading}</h2>`);
+      expect(principles[index]).toContain(`<p>${body}</p>`);
+    });
+
+    const process = sectionByClass(html, 'manifesto-process');
+    expect(process).toMatch(/<h2[^>]*>How we work<\/h2>[\s\S]*<ol class="process-rail">/);
+    expect(orderedListItems(process, 'process-rail')).toHaveLength(3);
+    for (const heading of ['Define', 'Build', 'Refine']) {
+      expect(process).toContain(`<h3>${heading}</h3>`);
     }
+  });
+
+  it('keeps all service capabilities and the approved delivery panel in semantic order', () => {
+    const html = page('services');
+    const ledger = pageSystemRegion(html, 'capability-ledger');
+    const capabilities = orderedListItems(ledger, 'capability-ledger');
+    const expectedCapabilities = [
+      [
+        'Mobile game development',
+        'Shape a game concept into a responsive mobile experience designed around clear interaction, satisfying play, and reliable performance.',
+      ],
+      [
+        'Android &amp; cross-platform apps',
+        'Bring a product to the devices your audience uses with a maintainable application experience and a practical release path.',
+      ],
+      [
+        'UI/UX design',
+        'Turn complex workflows into interfaces that feel clear, consistent, and easy to learn.',
+      ],
+      [
+        'Custom digital solutions',
+        'Replace disconnected tools and manual steps with focused software built around the way your business operates.',
+      ],
+      [
+        'Product modernization',
+        'Improve an existing product’s usability, maintainability, and readiness for what comes next.',
+      ],
+      [
+        'Quality &amp; performance',
+        'Find friction before users do through deliberate testing, performance review, and release-focused quality work.',
+      ],
+      [
+        'Maintenance &amp; support',
+        'Keep products dependable after launch with measured improvements, issue resolution, and ongoing technical care.',
+      ],
+    ] as const;
+
+    expect(ledger).toMatch(/<h2[^>]*>Capabilities<\/h2>[\s\S]*<ol class="capability-ledger">/);
+    expect(capabilities).toHaveLength(7);
+    expectedCapabilities.forEach(([heading, body], index) => {
+      expect(capabilities[index]).toContain(`<h3>${heading}</h3>`);
+      expect(capabilities[index]).toContain(`<p>${body}</p>`);
+    });
+
+    const delivery = sectionByClass(html, 'technical-section-band--dark');
+    expect(delivery).toContain('<span class="eyebrow">How we work</span>');
+    expect(delivery).toContain('<h2 id="technical-section-01">Clarity at every stage.</h2>');
+    expect(delivery).toContain(
+      '<p>We connect product intent, interface design, engineering, testing, and delivery so each decision supports the experience as a whole.</p>',
+    );
+    expect(orderedListItems(delivery, 'process-rail')).toHaveLength(3);
+    for (const heading of ['Define', 'Build', 'Refine']) {
+      expect(delivery).toContain(`<h3>${heading}</h3>`);
+    }
+  });
+
+  it('keeps all digital system bands static and in semantic order', () => {
+    const bands = pageSystemRegion(page('digital-solutions'), 'system-bands');
+    const items = orderedListItems(bands, 'system-bands');
+    const expectedItems = [
+      [
+        'Custom mobile applications',
+        'Give customers or teams a focused mobile experience shaped around a real workflow.',
+      ],
+      [
+        'Business workflow solutions',
+        'Reduce repetitive handoffs and bring important work into a clearer, more consistent flow.',
+      ],
+      [
+        'API integrations',
+        'Help products and services exchange information reliably across established boundaries.',
+      ],
+      [
+        'Cloud-connected systems',
+        'Connect applications to well-structured services that can support secure, dependable product experiences.',
+      ],
+      [
+        'Product consulting &amp; modernization',
+        'Clarify the next practical move for an existing product, from experience improvements to technical renewal.',
+      ],
+    ] as const;
+
+    expect(bands).toContain('<ol class="system-bands">');
+    expect(items).toHaveLength(5);
+    expectedItems.forEach(([heading, body], index) => {
+      expect(items[index]).toContain(`<h2>${heading}</h2>`);
+      expect(items[index]).toContain(`<p>${body}</p>`);
+    });
+    expect(bands).not.toMatch(/<(?:a|button)\b/i);
   });
 
   it('uses the approved Pattern 1A identity', () => {
