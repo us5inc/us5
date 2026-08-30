@@ -171,6 +171,10 @@ test('form instructions meet normal-text contrast', async ({ page }) => {
   await page.goto(`${process.env.TASK1_BASE_URL ?? './'}contact/`);
   const note = page.locator('#form-status');
 
+  await page.getByRole('button', { name: 'Prepare email enquiry' }).click();
+  await expect(note).toBeVisible();
+  await expect(note).not.toBeEmpty();
+
   const contrast = await renderedContrast(note);
 
   expect(contrast).toBeGreaterThanOrEqual(4.5);
