@@ -1,4 +1,5 @@
 ---
+import EmailLink from '../../../components/EmailLink.astro';
 import LegalLayout from '../../../layouts/LegalLayout.astro';
 import { products } from '../../../config/products';
 export function getStaticPaths() {
@@ -88,6 +89,6 @@ const productPrivacySections = [
   </p><h2 id="changes">14. Changes</h2><p>
     Material changes will be reflected by the updated date on this policy.
   </p><h2 id="contact">15. Contact</h2><p>
-    <a href={`mailto:${product.supportEmail}`}>{product.supportEmail}</a>
+    <EmailLink email={product.supportEmail}>{product.supportEmail}</EmailLink>
   </p></LegalLayout
 >

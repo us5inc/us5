@@ -56,8 +56,9 @@
   >
 </form>
 <script>
-  import { buildMailto, validateEnquiry } from '../lib/enquiry';
+  import { buildEnquiryComposeUrl, validateEnquiry } from '../lib/enquiry';
   const form = document.querySelector<HTMLFormElement>('#enquiry');
+  const status = document.querySelector<HTMLElement>('#form-status');
   form?.addEventListener('submit', (event) => {
     event.preventDefault();
     const data = new FormData(form);
@@ -76,18 +77,22 @@
     );
     const firstInvalid = controls.find((control) => Boolean(errors[control.name]));
     if (Object.keys(errors).length) {
-      document.querySelector('#form-status')!.textContent =
-        'Please correct the highlighted fields.';
+      if (status) status.textContent = 'Please correct the highlighted fields.';
       firstInvalid?.focus();
       return;
     }
     const get = (key: string) => String(data.get(key) ?? '').trim();
-    window.location.href = buildMailto({
-      name: get('name'),
-      email: get('email'),
-      company: get('company'),
-      service: get('service'),
-      summary: get('summary'),
-    });
+    if (status) status.textContent = 'Opening Gmail in a new tab.';
+    window.open(
+      buildEnquiryComposeUrl({
+        name: get('name'),
+        email: get('email'),
+        company: get('company'),
+        service: get('service'),
+        summary: get('summary'),
+      }),
+      '_blank',
+      'noopener,noreferrer',
+    );
   });
 </script>

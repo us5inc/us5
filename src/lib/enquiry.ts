@@ -1,4 +1,5 @@
 import { siteConfig } from '../config/site';
+import { buildGmailComposeUrl } from './email';
 export interface Enquiry {
   name: string;
   email: string;
@@ -18,10 +19,8 @@ export function validateEnquiry(data: FormData): Record<string, string> {
     errors.consent = 'Confirm that we may use these details to respond.';
   return errors;
 }
-export function buildMailto(enquiry: Enquiry): string {
-  const subject = encodeURIComponent(`Project enquiry — ${enquiry.service}`);
-  const body = encodeURIComponent(
-    `Name: ${enquiry.name}\nEmail: ${enquiry.email}\nCompany: ${enquiry.company || 'Not provided'}\nService: ${enquiry.service}\n\nProject summary:\n${enquiry.summary}`,
-  );
-  return `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
+export function buildEnquiryComposeUrl(enquiry: Enquiry): string {
+  const subject = `Project enquiry — ${enquiry.service}`;
+  const body = `Name: ${enquiry.name}\nEmail: ${enquiry.email}\nCompany: ${enquiry.company || 'Not provided'}\nService: ${enquiry.service}\n\nProject summary:\n${enquiry.summary}`;
+  return buildGmailComposeUrl({ to: siteConfig.email, subject, body });
 }

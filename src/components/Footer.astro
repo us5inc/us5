@@ -1,4 +1,5 @@
 ---
+import EmailLink from './EmailLink.astro';
 import Logo from './Logo.astro';
 import { siteConfig } from '../config/site';
 import { withBase } from '../lib/urls';
@@ -36,7 +37,7 @@ import { withBase } from '../lib/urls';
         <span aria-hidden="true">03 /</span>
         Contact
       </h2>
-      <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+      <EmailLink email={siteConfig.email}>{siteConfig.email}</EmailLink>
     </div>
   </div>
   <div class="shell copyright">

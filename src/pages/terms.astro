@@ -1,4 +1,5 @@
 ---
+import EmailLink from '../components/EmailLink.astro';
 import LegalLayout from '../layouts/LegalLayout.astro';
 import { siteConfig } from '../config/site';
 const termsSections = [
@@ -31,8 +32,8 @@ const termsSections = [
     website is provided without guarantees of uninterrupted availability, and US5 Incorporation is
     not responsible for indirect loss arising solely from use of this informational site.
   </p><h2 id="contact">Contact</h2><p>
-    Questions about these terms may be sent to <a href={`mailto:${siteConfig.email}`}
-      >{siteConfig.email}</a
+    Questions about these terms may be sent to <EmailLink email={siteConfig.email}
+      >{siteConfig.email}</EmailLink
     >.
   </p></LegalLayout
 >

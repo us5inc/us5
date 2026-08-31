@@ -79,6 +79,32 @@ test('home diagram settles immediately for reduced motion', async ({ page }) => 
   await expect(trace).toHaveCSS('stroke-dashoffset', '0px');
   await expect(page.getByRole('heading', { name: 'Neon Bubble Galaxy' })).toBeVisible();
 });
+test('privacy policy identifies both games and loads both app icons', async ({ page }) => {
+  await page.goto('./privacy/');
+
+  for (const app of [
+    {
+      name: 'Neon Bubble Galaxy',
+      iconName: 'Neon Bubble Galaxy game icon',
+      iconPath: '/images/neon-bubble-galaxy.png',
+    },
+    {
+      name: 'Arrows Puzzle Pro',
+      iconName: 'Arrows Puzzle Pro game icon',
+      iconPath: '/images/arrows-puzzle-pro.png',
+    },
+  ]) {
+    await expect(page.getByRole('heading', { level: 2, name: app.name })).toBeVisible();
+    const icon = page.getByRole('img', { name: app.iconName });
+    await expect(icon).toBeVisible();
+    await expect(icon).toHaveAttribute('src', new RegExp(`${app.iconPath}$`));
+    expect(await icon.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+  }
+
+  await expect(page.locator('#advertising-diagnostics + p')).toContainText(
+    'Neon Bubble Galaxy and Arrows Puzzle Pro',
+  );
+});
 test('key routes do not overflow at 320 pixels', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 700 });
   for (const route of ['./', './products/', './contact/', './privacy/']) {
@@ -186,9 +212,14 @@ test('contact briefing and form panel reflow without horizontal overflow', async
   const panel = page.locator('.contact-form-panel');
   const directEmail = brief.getByRole('link', { name: 'usfiveincorporation@gmail.com' });
 
-  await expect(brief).toContainText('Your email application will open with a prepared message.');
+  await expect(brief).toContainText('Gmail will open with a prepared message.');
   await expect(brief).toContainText('Nothing is stored by this website.');
-  await expect(directEmail).toHaveAttribute('href', 'mailto:usfiveincorporation@gmail.com');
+  await expect(directEmail).toHaveAttribute(
+    'href',
+    /^https:\/\/mail\.google\.com\/mail\/\?.*to=usfiveincorporation%40gmail\.com/,
+  );
+  await expect(directEmail).toHaveAttribute('target', '_blank');
+  await expect(directEmail).toHaveAttribute('rel', 'noopener noreferrer');
   const desktopBrief = await brief.boundingBox();
   const desktopPanel = await panel.boundingBox();
   expect(desktopBrief).not.toBeNull();
@@ -205,7 +236,40 @@ test('contact briefing and form panel reflow without horizontal overflow', async
     true,
   );
 });
-test('contact explains and validates email fallback', async ({ page }) => {
+test('direct email opens a pre-addressed Gmail compose tab', async ({ page }) => {
+  await page.context().route('https://mail.google.com/**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'text/html',
+      body: '<title>Gmail compose</title>',
+    }),
+  );
+  await page.goto('./contact/');
+  const directEmail = page
+    .getByLabel('Contact briefing')
+    .getByRole('link', { name: 'usfiveincorporation@gmail.com' });
+
+  const popupPromise = page.waitForEvent('popup', { timeout: 3_000 });
+  await directEmail.click();
+  const popup = await popupPromise;
+  await popup.waitForLoadState('domcontentloaded');
+  const compose = new URL(popup.url());
+
+  expect(compose.origin).toBe('https://mail.google.com');
+  expect(compose.pathname).toBe('/mail/');
+  expect(compose.searchParams.get('view')).toBe('cm');
+  expect(compose.searchParams.get('fs')).toBe('1');
+  expect(compose.searchParams.get('to')).toBe('usfiveincorporation@gmail.com');
+  await expect(page).toHaveURL(/\/contact\/$/);
+});
+test('contact validates before opening a prepared Gmail compose tab', async ({ page }) => {
+  await page.context().route('https://mail.google.com/**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'text/html',
+      body: '<title>Gmail compose</title>',
+    }),
+  );
   await page.goto('./contact/');
   await expect(page.getByText('Nothing is stored by this website.')).toBeVisible();
   const name = page.getByLabel('Name');
@@ -258,6 +322,24 @@ test('contact explains and validates email fallback', async ({ page }) => {
   await expect(summary).toBeFocused();
   await expect(summary).toHaveAttribute('aria-invalid', 'true');
   await expect(consent).toHaveAttribute('aria-invalid', 'false');
+
+  await summary.fill('Please help us improve a focused mobile product experience.');
+  const popupPromise = page.waitForEvent('popup', { timeout: 3_000 });
+  await page.getByRole('button', { name: 'Prepare email enquiry' }).click();
+  const popup = await popupPromise;
+  await popup.waitForLoadState('domcontentloaded');
+  const compose = new URL(popup.url());
+
+  expect(compose.origin).toBe('https://mail.google.com');
+  expect(compose.searchParams.get('to')).toBe('usfiveincorporation@gmail.com');
+  expect(compose.searchParams.get('su')).toBe('Project enquiry — UI/UX design');
+  expect(compose.searchParams.get('body')).toContain('Name: Ada Lovelace');
+  expect(compose.searchParams.get('body')).toContain('Email: ada@example.com');
+  expect(compose.searchParams.get('body')).toContain(
+    'Please help us improve a focused mobile product experience.',
+  );
+  await expect(page.locator('#form-status')).toHaveText('Opening Gmail in a new tab.');
+  await expect(page).toHaveURL(/\/contact\/$/);
 });
 test('key pages and the open mobile menu have no serious accessibility violations', async ({
   page,

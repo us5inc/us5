@@ -1,4 +1,5 @@
 ---
+import EmailLink from '../components/EmailLink.astro';
 import LegalLayout from '../layouts/LegalLayout.astro';
 import { featuredProduct } from '../config/featured-product';
 import { siteConfig } from '../config/site';
@@ -19,7 +20,7 @@ const supportSections = [
   sections={supportSections}
   ><h2 id="how-we-can-help">How we can help</h2><p>
     For support with <strong>{featuredProduct.name}</strong>, website questions, business enquiries,
-    or privacy requests, email <a href={'mailto:' + siteConfig.email}>{siteConfig.email}</a>.
+    or privacy requests, email <EmailLink email={siteConfig.email}>{siteConfig.email}</EmailLink>.
   </p><h2 id="what-to-include">What to include</h2><p>
     Name the product or page involved, describe what you expected, and explain what happened. For
     privacy requests, include enough information for us to identify the relevant correspondence or

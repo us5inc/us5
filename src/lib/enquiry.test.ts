@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildMailto, validateEnquiry } from './enquiry';
+import { buildEnquiryComposeUrl, validateEnquiry } from './enquiry';
 
 describe('enquiry email flow', () => {
   it('rejects missing required fields and an invalid email', () => {
@@ -13,16 +13,24 @@ describe('enquiry email flow', () => {
       consent: expect.any(String),
     });
   });
-  it('builds an encoded email draft', () => {
-    const url = buildMailto({
-      name: 'Ada',
+  it('builds a Gmail compose draft with decoded recipient, subject, and body values', () => {
+    const url = buildEnquiryComposeUrl({
+      name: 'Ada & Grace',
       email: 'ada@example.com',
-      company: 'Example',
-      service: 'Mobile application',
-      summary: 'A useful project summary that is long enough.',
+      company: 'Example + Co.',
+      service: 'UI/UX design',
+      summary: 'Please preserve & symbols, + signs, and this newline.\nSecond line.',
     });
-    expect(url).toContain('mailto:usfiveincorporation@gmail.com');
-    expect(url).toContain('subject=Project%20enquiry');
-    expect(url).toContain('Ada');
+    const compose = new URL(url);
+
+    expect(compose.origin).toBe('https://mail.google.com');
+    expect(compose.pathname).toBe('/mail/');
+    expect(compose.searchParams.get('view')).toBe('cm');
+    expect(compose.searchParams.get('fs')).toBe('1');
+    expect(compose.searchParams.get('to')).toBe('usfiveincorporation@gmail.com');
+    expect(compose.searchParams.get('su')).toBe('Project enquiry — UI/UX design');
+    expect(compose.searchParams.get('body')).toBe(
+      'Name: Ada & Grace\nEmail: ada@example.com\nCompany: Example + Co.\nService: UI/UX design\n\nProject summary:\nPlease preserve & symbols, + signs, and this newline.\nSecond line.',
+    );
   });
 });

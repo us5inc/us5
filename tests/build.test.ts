@@ -1,10 +1,16 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 const root = process.cwd();
 const page = (route: string) => readFileSync(join(root, 'dist', route, 'index.html'), 'utf8');
+const generatedHtmlFiles = (directory = join(root, 'dist')): string[] =>
+  readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) return generatedHtmlFiles(path);
+    return entry.isFile() && entry.name.endsWith('.html') ? [path] : [];
+  });
 const mainContent = (html: string) => html.match(/<main[^>]*>(.*?)<\/main>/s)?.[1] ?? '';
 const sectionByClass = (html: string, className: string) =>
   mainContent(html).match(
@@ -73,6 +79,18 @@ describe('generated corporate site', () => {
     expect(html).toContain('Skip to content');
     expect(html).toContain('aria-label="Primary navigation"');
     expect(html).not.toMatch(/testimonial|downloads|five-star|award-winning/i);
+  });
+
+  it('renders every published email entry point as a Gmail compose link', () => {
+    const gmailLink =
+      /<a\b(?=[^>]*href="https:\/\/mail\.google\.com\/mail\/\?[^"]*")(?=[^>]*target="_blank")(?=[^>]*rel="noopener noreferrer")[^>]*>/g;
+
+    for (const file of generatedHtmlFiles()) {
+      const html = readFileSync(file, 'utf8');
+      const route = file.slice(join(root, 'dist').length + 1);
+      expect(html, route).not.toContain('mailto:');
+      expect(html.match(gmailLink)?.length ?? 0, route).toBeGreaterThanOrEqual(1);
+    }
   });
 
   it('renders the Home editorial product and process structure', () => {
@@ -363,13 +381,24 @@ describe('generated corporate site', () => {
     expect(record).toBe('google.com, pub-9578601039790653, DIRECT, f08c47fec0942fa0');
   });
 
-  it('publishes an app-specific privacy disclosure for Neon Bubble Galaxy', () => {
+  it('publishes app-specific privacy disclosures for both confirmed games', () => {
     const html = page('privacy');
     expect(html).toContain('Neon Bubble Galaxy');
     expect(html).toContain('/us5/images/neon-bubble-galaxy.png');
+    expect(html).toContain('Arrows Puzzle Pro');
+    expect(html).toContain('/us5/images/arrows-puzzle-pro.png');
+    expect(html).toContain('alt="Arrows Puzzle Pro game icon"');
+    expect(html).toMatch(/<h2\b[^>]*\bid="arrows-puzzle-pro-data"[^>]*>Arrows Puzzle Pro<\/h2>/);
+    expect(html).toMatch(
+      /Arrows Puzzle Pro does not require an account\.[\s\S]*?US5 does not directly collect your name,[\s\S]*?US5 does not sell personal data\./,
+    );
+    expect(existsSync(join(root, 'dist', 'images', 'arrows-puzzle-pro.png'))).toBe(true);
+    expect(html).toContain('Neon Bubble Galaxy and Arrows Puzzle Pro use the');
+    expect(html).toContain('Both games also use');
     expect(html).toContain('Google Mobile Ads SDK (AdMob)');
     expect(html).toContain('Firebase Crashlytics');
-    expect(html).toContain('IP address');
+    expect(html).toContain('IP addresses');
+    expect(html).toContain('interactions with each app');
     expect(html).toContain('installation identifiers');
     expect(html).toContain('does not sell personal data');
   });
@@ -379,7 +408,14 @@ describe('generated corporate site', () => {
     const contents =
       privacy.match(/<nav\b(?=[^>]*aria-label="On this page")[^>]*>[\s\S]*?<\/nav>/)?.[0] ?? '';
 
-    for (const id of ['scope', 'game-data', 'sharing-retention', 'choices', 'contact']) {
+    for (const id of [
+      'scope',
+      'game-data',
+      'arrows-puzzle-pro-data',
+      'sharing-retention',
+      'choices',
+      'contact',
+    ]) {
       expect(contents).toContain(`href="#${id}"`);
       expect(privacy).toMatch(new RegExp(`<h2\\b[^>]*\\bid="${id}"[^>]*>`));
     }

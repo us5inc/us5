@@ -6,7 +6,7 @@ Production corporate website for US5 Incorporation, built with Astro and strict 
 
 The site uses the approved Pattern 1A “One stroke, three characters” identity. The monogram is constructed on a 120 × 120 grid with the path `M64 26 H34 V60 A26 26 0 0 0 86 60 V42`, a 14-unit stroke, and round caps and joins. Keep clear space around the mark equal to its stroke width.
 
-The website application palette is Midnight `#0A0E1A`, Paper `#F4F5F7`, and White `#FFFFFF` only. The full-color Neon Bubble Galaxy icon is the sole product-art exception. The master Pattern 1A brand source still records the broader corporate palette outside this web application. Space Grotesk is used for the wordmark and headings, IBM Plex Sans for body and interface copy, and IBM Plex Mono for labels and technical details; all font files are self-hosted through the locked Fontsource packages.
+The website application palette is Midnight `#0A0E1A`, Paper `#F4F5F7`, and White `#FFFFFF` only. Verified app icons may retain their product artwork: Neon Bubble Galaxy is the current full-color exception, while Arrows Puzzle Pro remains within the monochrome palette. The master Pattern 1A brand source still records the broader corporate palette outside this web application. Space Grotesk is used for the wordmark and headings, IBM Plex Sans for body and interface copy, and IBM Plex Mono for labels and technical details; all font files are self-hosted through the locked Fontsource packages.
 
 ## Local development
 
@@ -47,4 +47,4 @@ Before publishing, review every product policy against the app’s actual SDKs a
 
 ## Website behavior
 
-The contact form opens a prepared message in the visitor’s email application; this static site does not store or claim to send it. The site intentionally uses no analytics, advertising, accounts, or non-essential cookies, so it has no cookie banner. The authorized AdMob seller record is maintained at the crawler-required hostname root, `https://us5inc.github.io/app-ads.txt`, and mirrored at `https://us5inc.github.io/us5/app-ads.txt` for convenience.
+Email links and the contact form open a prepared Gmail compose draft in a new tab; this static site does not store or claim to send it. The site intentionally uses no analytics, advertising, accounts, or non-essential cookies, so it has no cookie banner. The authorized AdMob seller record is maintained at the crawler-required hostname root, `https://us5inc.github.io/app-ads.txt`, and mirrored at `https://us5inc.github.io/us5/app-ads.txt` for convenience.

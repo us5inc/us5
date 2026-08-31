@@ -1,4 +1,5 @@
 ---
+import EmailLink from '../../../components/EmailLink.astro';
 import LegalLayout from '../../../layouts/LegalLayout.astro';
 import { products } from '../../../config/products';
 export function getStaticPaths() {
@@ -15,7 +16,7 @@ const productDeletionSections = [{ id: 'request-deletion', label: 'Request delet
   updated={product.updatedDate}
   sections={productDeletionSections}
   ><h2 id="request-deletion">Request deletion</h2><p>{product.deletion}</p><p>
-    Contact <a href={`mailto:${product.supportEmail}`}>{product.supportEmail}</a> and identify the product
-    and relevant account or device context without sending passwords.
+    Contact <EmailLink email={product.supportEmail}>{product.supportEmail}</EmailLink> and identify the
+    product and relevant account or device context without sending passwords.
   </p></LegalLayout
 >

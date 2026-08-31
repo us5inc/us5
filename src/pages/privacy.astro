@@ -1,10 +1,12 @@
 ---
+import EmailLink from '../components/EmailLink.astro';
 import LegalLayout from '../layouts/LegalLayout.astro';
 import { siteConfig } from '../config/site';
 import { withBase } from '../lib/urls';
 const privacySections = [
   { id: 'scope', label: 'Scope' },
-  { id: 'game-data', label: 'Game data' },
+  { id: 'game-data', label: 'Neon Bubble Galaxy' },
+  { id: 'arrows-puzzle-pro-data', label: 'Arrows Puzzle Pro' },
   { id: 'advertising-diagnostics', label: 'Advertising and diagnostics' },
   { id: 'information-you-provide', label: 'Information you provide' },
   { id: 'website-operation', label: 'Website operation' },
@@ -17,15 +19,15 @@ const privacySections = [
 
 <LegalLayout
   title="Privacy policy"
-  description="How US5 Incorporation and Neon Bubble Galaxy handle information."
+  description="How US5 Incorporation, Neon Bubble Galaxy, and Arrows Puzzle Pro handle information."
   path="/privacy/"
-  updated="29 August 2026"
+  updated="31 August 2026"
   sections={privacySections}
   ><h2 id="scope">Scope</h2><p>
-    This policy covers the US5 Incorporation corporate website and the mobile game <strong
+    This policy covers the US5 Incorporation corporate website and the mobile games <strong
       >Neon Bubble Galaxy</strong
-    >. It explains what US5 handles directly and what our third-party service providers process when
-    you use the game.
+    > and <strong>Arrows Puzzle Pro</strong>. It explains what US5 handles directly and what our
+    third-party service providers process when you use either game.
   </p><div class="app-privacy-card">
     <img
       src={withBase('/images/neon-bubble-galaxy.png')}
@@ -39,25 +41,42 @@ const privacySections = [
         does not sell personal data.
       </p>
     </div>
-  </div><h2 id="advertising-diagnostics">Advertising and diagnostics in the game</h2><p>
-    Neon Bubble Galaxy uses the <strong>Google Mobile Ads SDK (AdMob)</strong> to provide advertising.
-    Google states that this SDK automatically collects and shares IP address, user interactions with the
-    app, diagnostic information, and device or account identifiers for advertising, analytics, and fraud
-    prevention. Advertising may be personalized or non-personalized depending on consent, age, region,
-    device settings, and the app's configuration.
+  </div><div class="app-privacy-card">
+    <img
+      src={withBase('/images/arrows-puzzle-pro.png')}
+      alt="Arrows Puzzle Pro game icon"
+      width="512"
+      height="512"
+    /><div>
+      <span class="eyebrow">Mobile game</span><h2 id="arrows-puzzle-pro-data">
+        Arrows Puzzle Pro
+      </h2><p>
+        Arrows Puzzle Pro does not require an account. US5 does not directly collect your name,
+        email address, contacts, precise location, photos, or gameplay content through the game. US5
+        does not sell personal data.
+      </p>
+    </div>
+  </div><h2 id="advertising-diagnostics">Advertising and diagnostics in the games</h2><p>
+    Neon Bubble Galaxy and Arrows Puzzle Pro use the <strong>Google Mobile Ads SDK (AdMob)</strong>
+    {' '}to provide advertising. Google states that this SDK automatically collects and shares IP
+    addresses, which may be used to estimate general location, interactions with each app,
+    diagnostic information, and device or account identifiers for advertising, analytics, and fraud
+    prevention. Advertising may be personalized or non-personalized depending on consent, age,
+    region, device settings, and each app's configuration.
   </p><p>
-    The game also uses <strong>Firebase Crashlytics</strong> to identify crashes and improve stability.
+    Both games also use <strong>Firebase Crashlytics</strong> to identify crashes and improve stability.
     Crashlytics may automatically process crash logs, app and device diagnostics, and installation identifiers.
-    This information is used to investigate errors, prevent failures, and maintain the game.
+    This information is used to investigate errors, prevent failures, and maintain the games.
   </p><p>
     These services are provided by Google and operate under <a
       href="https://policies.google.com/privacy">Google's Privacy Policy</a
     >. Their automatic SDK processing means it would not be accurate to say that no data is
-    processed or shared when the game is used.
+    processed or shared when either game is used.
   </p><h2 id="information-you-provide">Information you choose to provide</h2><p>
-    This website does not receive or store form submissions. The enquiry form prepares a message in
-    your own email application. If you send it, US5 Incorporation receives the information through
-    email and uses it to respond and manage the resulting correspondence.
+    This website does not receive or store form submissions. The enquiry form opens a prepared draft
+    in Gmail. When you choose to open it, the draft details are sent to Google so Gmail can display
+    them. If you send the message, US5 Incorporation receives the information through email and uses
+    it to respond and manage the resulting correspondence.
   </p><h2 id="website-operation">Website operation</h2><p>
     We do not intentionally deploy analytics, advertising, accounts, or non-essential cookies.
     GitHub Pages delivers the website and may process ordinary technical information such as IP
@@ -71,16 +90,19 @@ const privacySections = [
     legitimate record-keeping needs, then remove it when no longer reasonably needed.
   </p><h2 id="choices">Your choices</h2><p>
     You can manage advertising choices through your device and Google settings. You may also reset
-    or delete your device's advertising identifier and uninstall the game. You may contact us to ask
-    about, correct, or request deletion of information held in correspondence, subject to
+    or delete your device's advertising identifier and uninstall either game. You may contact us to
+    ask about, correct, or request deletion of information held in correspondence, subject to
     information we reasonably need to retain for security, legal, or record-keeping purposes. The
-    game has no US5 account or saved profile to delete.
+    games have no US5 account or saved profile to delete.
   </p><h2 id="security">Security</h2><p>
-    We use reasonable care when handling correspondence, but no internet transmission or storage
-    method can be guaranteed completely secure.
+    Google states that Mobile Ads SDK data is encrypted in transit and that Crashlytics data is
+    encrypted in transit and at rest. We use reasonable care when handling correspondence, but no
+    internet transmission or storage method can be guaranteed completely secure.
   </p><h2 id="contact">Changes and contact</h2><p>
-    We may update this policy when the website, game, or service providers change. Questions and
-    privacy requests can be sent to <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>.
+    We may update this policy when the website, games, or service providers change. Questions and
+    privacy requests can be sent to <EmailLink email={siteConfig.email}
+      >{siteConfig.email}</EmailLink
+    >.
   </p></LegalLayout
 >
 

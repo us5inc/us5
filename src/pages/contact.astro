@@ -1,4 +1,5 @@
 ---
+import EmailLink from '../components/EmailLink.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
@@ -12,16 +13,16 @@ import { siteConfig } from '../config/site';
   ><PageHero
     eyebrow="Start a conversation"
     title="Tell us what you want to move forward."
-    intro="Share the goal, the audience, and where your product stands today. Your email application will prepare the message for you."
+    intro="Share the goal, the audience, and where your product stands today. Gmail will prepare the message for you."
   /><section class="section contact-section">
     <div class="shell contact-layout">
       <aside class="contact-brief" aria-label="Contact briefing">
         <p>
-          Prefer to write directly? Email <a href={`mailto:${siteConfig.email}`}
-            >{siteConfig.email}</a
+          Prefer to write directly? Email <EmailLink email={siteConfig.email}
+            >{siteConfig.email}</EmailLink
           >.
         </p>
-        <p id="contact-process">Your email application will open with a prepared message.</p>
+        <p id="contact-process">Gmail will open with a prepared message.</p>
         <p id="contact-privacy">Nothing is stored by this website.</p>
       </aside><div class="contact-form-panel"><EnquiryForm /></div>
     </div>

@@ -1,4 +1,5 @@
 ---
+import EmailLink from '../components/EmailLink.astro';
 import LegalLayout from '../layouts/LegalLayout.astro';
 import { featuredProduct } from '../config/featured-product';
 import { siteConfig } from '../config/site';
@@ -23,8 +24,8 @@ const deletionSections = [
     operate an in-game account or saved-profile deletion process.
   </p><h2 id="email-correspondence">Email correspondence held by US5</h2><p>
     If you emailed US5 Incorporation and want the related correspondence reviewed for deletion,
-    email <a href={'mailto:' + siteConfig.email + '?subject=Data%20deletion%20request'}
-      >{siteConfig.email}</a
+    email <EmailLink email={siteConfig.email} subject="Data deletion request"
+      >{siteConfig.email}</EmailLink
     > with the subject “Data deletion request.”
   </p><h2 id="what-to-include">What to include</h2><p>
     Provide the email address used, approximate date, and enough context to locate the
