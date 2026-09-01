@@ -38,10 +38,8 @@ const visibleCopy = (html: string) =>
     .map((segment) => segment.replace(/\s+/g, ' ').trim())
     .filter(Boolean)
     .join('\n');
-const productIcon = (html: string) =>
-  html
-    .match(/<img\b[^>]*>/gi)
-    ?.find((tag) => tag.includes('src="/us5/images/neon-bubble-galaxy.png"')) ?? '';
+const productIcon = (html: string, iconPath = '/us5/images/neon-bubble-galaxy.png') =>
+  html.match(/<img\b[^>]*>/gi)?.find((tag) => tag.includes(`src="${iconPath}"`)) ?? '';
 const expectedProcessSteps = [
   [
     'Define',
@@ -100,6 +98,10 @@ describe('generated corporate site', () => {
     expect(home).toMatch(
       /<article class="product-feature"[\s\S]*href="\/us5\/products\/neon-bubble-galaxy\/"/,
     );
+    expect(home).toMatch(
+      /<article class="product-feature"[\s\S]*href="\/us5\/products\/arrows-puzzle-pro\/"/,
+    );
+    expect(home.match(/<article class="product-feature"/g)).toHaveLength(2);
     expect(home).not.toMatch(/class="[^"]*\bcard\b[^"]*"/);
   });
 
@@ -302,6 +304,41 @@ describe('generated corporate site', () => {
     expect(productLinks(listing)).toContain('href="/us5/products/neon-bubble-galaxy/"');
   });
 
+  it('lists Arrows Puzzle Pro as a published mobile game', () => {
+    for (const html of [page(''), page('products')]) {
+      const main = mainContent(html);
+      expect(main).toContain('Arrows Puzzle Pro');
+      expect(main).toContain('href="/us5/products/arrows-puzzle-pro/"');
+      expect(main).toContain('src="/us5/images/arrows-puzzle-pro.png"');
+      expect(main).toMatch(/<span[^>]*>Published mobile game<\/span>/);
+    }
+  });
+
+  it('publishes a dedicated factual Arrows Puzzle Pro route', () => {
+    const productFile = join(root, 'dist', 'products', 'arrows-puzzle-pro', 'index.html');
+    expect(existsSync(productFile)).toBe(true);
+    const html = readFileSync(productFile, 'utf8');
+    const main = mainContent(html);
+    const icon = productIcon(main, '/us5/images/arrows-puzzle-pro.png');
+
+    expect(main).toMatch(/<h1[^>]*>Arrows Puzzle Pro<\/h1>/);
+    expect(main).toMatch(/<span[^>]*>Published mobile game<\/span>/);
+    expect(main).toMatch(
+      /<p[^>]*class="lead"[^>]*>\s*A mobile game published by US5 Incorporation\.\s*<\/p>/,
+    );
+    expect(main).toMatch(/<dt[^>]*>Developer<\/dt><dd[^>]*>US5 Incorporation<\/dd>/);
+    expect(main).toMatch(/<dt[^>]*>Category<\/dt><dd[^>]*>Mobile game<\/dd>/);
+    expect(icon).toContain('src="/us5/images/arrows-puzzle-pro.png"');
+    expect(icon).toMatch(/\bwidth="512"/);
+    expect(icon).toMatch(/\bheight="512"/);
+    expect(productLinks(html)).toContain('href="/us5/privacy/"');
+    expect(productLinks(html)).toContain('href="/us5/support/"');
+    expect(productLinks(html)).toContain('href="/us5/data-deletion/"');
+    expect(productLinks(html).match(/<a\b/g) ?? []).toHaveLength(3);
+    expect(productLinks(html)).not.toMatch(/href="https?:\/\//i);
+    expect(main).not.toMatch(/\b(?:coming soon|in development)\b/i);
+  });
+
   it('omits unverified store metadata and marketing claims', () => {
     const prohibitedCopy = [
       ['View on Google Play copy', /(?:^|\n)View on Google Play(?:\n|$)/i],
@@ -336,7 +373,7 @@ describe('generated corporate site', () => {
       ],
     ] as const;
 
-    for (const route of ['products', 'products/neon-bubble-galaxy']) {
+    for (const route of ['products', 'products/neon-bubble-galaxy', 'products/arrows-puzzle-pro']) {
       const html = page(route);
       const main = mainContent(html);
       const copy = visibleCopy(main);
@@ -365,7 +402,7 @@ describe('generated corporate site', () => {
     expect(support).not.toContain('No US5 mobile product');
     expect(deletion).not.toContain('Future mobile products');
     expect(deletion).not.toContain('No mobile product is currently published on this website.');
-    expect(deletion).toContain('does not provide a US5 account or saved profile');
+    expect(deletion).toContain('do not provide a US5 account or saved profile');
     expect(deletion).toContain('Email correspondence held by US5');
     expect(deletion).toContain('AdMob');
     expect(deletion).toContain('Firebase Crashlytics');
@@ -423,6 +460,8 @@ describe('generated corporate site', () => {
     expect(privacy).toContain('Firebase Crashlytics');
 
     expect(mainContent(page('support'))).toContain('Neon Bubble Galaxy');
+    expect(mainContent(page('support'))).toContain('Arrows Puzzle Pro');
     expect(mainContent(page('data-deletion'))).toContain('Neon Bubble Galaxy');
+    expect(mainContent(page('data-deletion'))).toContain('Arrows Puzzle Pro');
   });
 });

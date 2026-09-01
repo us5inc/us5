@@ -1,7 +1,7 @@
 ---
 import EmailLink from '../components/EmailLink.astro';
 import LegalLayout from '../layouts/LegalLayout.astro';
-import { featuredProduct } from '../config/featured-product';
+import { arrowsPuzzlePro, featuredProduct } from '../config/featured-product';
 import { siteConfig } from '../config/site';
 import { withBase } from '../lib/urls';
 const supportSections = [
@@ -16,21 +16,24 @@ const supportSections = [
   title="Support"
   description="Contact US5 Incorporation for website, product, and privacy support."
   path="/support/"
-  updated="29 August 2026"
+  updated="1 September 2026"
   sections={supportSections}
   ><h2 id="how-we-can-help">How we can help</h2><p>
-    For support with <strong>{featuredProduct.name}</strong>, website questions, business enquiries,
-    or privacy requests, email <EmailLink email={siteConfig.email}>{siteConfig.email}</EmailLink>.
+    For support with <strong>{featuredProduct.name}</strong> or <strong
+      >{arrowsPuzzlePro.name}</strong
+    >, website questions, business enquiries, or privacy requests, email <EmailLink
+      email={siteConfig.email}>{siteConfig.email}</EmailLink
+    >.
   </p><h2 id="what-to-include">What to include</h2><p>
     Name the product or page involved, describe what you expected, and explain what happened. For
     privacy requests, include enough information for us to identify the relevant correspondence or
     product context, but do not send passwords or sensitive credentials.
   </p><h2 id="product-support">Product support</h2><p>
-    When contacting us about {featuredProduct.name}, include the device context and a concise
+    When contacting us about either game, include the product name, device context, and a concise
     description of the issue. This verified email channel is the direct support route published by
     US5 Incorporation.
   </p><h2 id="privacy-support">Privacy support</h2><p>
-    Read the <a href={withBase(featuredProduct.privacyPath)}>privacy policy</a> for the game's current
+    Read the <a href={withBase(featuredProduct.privacyPath)}>privacy policy</a> for the games' current
     disclosures, or email us with a specific question.
   </p></LegalLayout
 >

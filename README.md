@@ -29,9 +29,9 @@ The workflow in `.github/workflows/deploy.yml` checks and deploys pushes to `mai
 
 For a custom domain, add the domain in **Settings → Pages**, configure the DNS records GitHub provides, add a `public/CNAME` file containing only that domain, and set `PUBLIC_SITE_BASE` to `/` in the workflow.
 
-## Featured product
+## Published products
 
-`src/config/featured-product.ts` contains the verified public information used to feature Neon Bubble Galaxy on the website. Its dedicated route is `/products/neon-bubble-galaxy/`, with privacy, support, and data-deletion links supplied by the same configuration. There is no verified Google Play listing URL, so the website intentionally renders no Google Play button.
+`src/config/featured-product.ts` contains the lightweight verified public information used to present Neon Bubble Galaxy and Arrows Puzzle Pro across the homepage and Products page. Their dedicated routes are `/products/neon-bubble-galaxy/` and `/products/arrows-puzzle-pro/`, with shared privacy, support, and data-deletion links supplied by the same configuration. There are no verified Google Play listing URLs, so the website intentionally renders no Google Play buttons.
 
 ## Adding a future store product
 

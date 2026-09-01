@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import Cta from '../../components/Cta.astro';
-import { featuredProduct } from '../../config/featured-product';
+import { publishedProducts } from '../../config/featured-product';
 import { withBase } from '../../lib/urls';
 ---
 
@@ -15,33 +15,51 @@ import { withBase } from '../../lib/urls';
     title="Published mobile experiences."
     intro="Explore product information and direct support resources from US5 Incorporation."
   /><section class="section alt">
-    <div class="shell">
-      <article class="product-card">
-        <img
-          src={withBase(featuredProduct.icon)}
-          alt="Neon Bubble Galaxy game icon"
-          width="512"
-          height="512"
-        /><div class="product-copy">
-          <span class="eyebrow">{featuredProduct.status}</span><h2>
-            <a href={withBase(featuredProduct.productPath)}>{featuredProduct.name}</a>
-          </h2><p>{featuredProduct.summary}</p><dl>
-            <div><dt>Developer</dt><dd>{featuredProduct.developer}</dd></div>
-            <div><dt>Category</dt><dd>{featuredProduct.category}</dd></div>
-          </dl><nav class="product-links" aria-label="Neon Bubble Galaxy resources">
-            <a href={withBase(featuredProduct.productPath)}>View product</a><a
-              href={withBase(featuredProduct.privacyPath)}>Privacy</a
-            ><a href={withBase(featuredProduct.supportPath)}>Support</a><a
-              href={withBase(featuredProduct.deletionPath)}>Data deletion</a
-            >
-          </nav>
-        </div>
-      </article>
+    <div class="shell product-list">
+      {
+        publishedProducts.map((product) => (
+          <article class="product-card">
+            <img
+              src={withBase(product.icon)}
+              alt={`${product.name} game icon`}
+              width="512"
+              height="512"
+            />
+            <div class="product-copy">
+              <span class="eyebrow">{product.status}</span>
+              <h2>
+                <a href={withBase(product.productPath)}>{product.name}</a>
+              </h2>
+              <p>{product.summary}</p>
+              <dl>
+                <div>
+                  <dt>Developer</dt>
+                  <dd>{product.developer}</dd>
+                </div>
+                <div>
+                  <dt>Category</dt>
+                  <dd>{product.category}</dd>
+                </div>
+              </dl>
+              <nav class="product-links" aria-label={`${product.name} resources`}>
+                <a href={withBase(product.productPath)}>View product</a>
+                <a href={withBase(product.privacyPath)}>Privacy</a>
+                <a href={withBase(product.supportPath)}>Support</a>
+                <a href={withBase(product.deletionPath)}>Data deletion</a>
+              </nav>
+            </div>
+          </article>
+        ))
+      }
     </div>
   </section><Cta /></BaseLayout
 >
 
 <style>
+  .product-list {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
   .product-card {
     display: grid;
     grid-template-columns: minmax(12rem, 24rem) minmax(0, 1fr);

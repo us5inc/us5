@@ -620,6 +620,11 @@ textarea {
   gap: 24px;
   align-items: center;
 }
+.product-feature + .product-feature {
+  margin-top: clamp(64px, 9vw, 112px);
+  padding-top: clamp(64px, 9vw, 112px);
+  border-top: 1px solid var(--line-dark);
+}
 .product-feature > img {
   display: block;
   grid-column: 1 / span 4;

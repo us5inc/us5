@@ -56,20 +56,38 @@ test('home navigation and mobile menu work', async ({ page }) => {
     'false',
   );
 });
-test('home keeps one page heading and the featured product visible across breakpoints', async ({
+test('home keeps one page heading and both published games visible across breakpoints', async ({
   page,
 }) => {
   const pageHeading = page.getByRole('heading', { level: 1 });
-  const productHeading = page.getByRole('heading', { level: 2, name: 'Neon Bubble Galaxy' });
+  const neonHeading = page.getByRole('heading', { level: 2, name: 'Neon Bubble Galaxy' });
+  const arrowsHeading = page.getByRole('heading', { level: 2, name: 'Arrows Puzzle Pro' });
 
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('./');
   await expect(pageHeading).toHaveCount(1);
-  await expect(productHeading).toBeVisible();
+  await expect(neonHeading).toBeVisible();
+  await expect(arrowsHeading).toBeVisible();
 
   await page.setViewportSize({ width: 320, height: 700 });
   await expect(pageHeading).toHaveCount(1);
-  await expect(productHeading).toBeVisible();
+  await expect(neonHeading).toBeVisible();
+  await expect(arrowsHeading).toBeVisible();
+});
+test('Products exposes both published games and the Arrows product route', async ({ page }) => {
+  await page.goto('./products/');
+  await expect(page.getByRole('heading', { level: 2, name: 'Neon Bubble Galaxy' })).toBeVisible();
+  const arrowsLink = page.getByRole('link', { name: 'Arrows Puzzle Pro' });
+  await expect(arrowsLink).toBeVisible();
+  await expect(arrowsLink).toHaveAttribute('href', /\/products\/arrows-puzzle-pro\/$/);
+
+  await arrowsLink.click();
+  await expect(page).toHaveURL(/\/products\/arrows-puzzle-pro\/$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Arrows Puzzle Pro' })).toBeVisible();
+  await expect(page.getByRole('img', { name: 'Arrows Puzzle Pro game icon' })).toBeVisible();
+  await expect(
+    page.getByRole('definition').filter({ hasText: 'Published mobile game' }),
+  ).toBeVisible();
 });
 test('home diagram settles immediately for reduced motion', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -107,7 +125,13 @@ test('privacy policy identifies both games and loads both app icons', async ({ p
 });
 test('key routes do not overflow at 320 pixels', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 700 });
-  for (const route of ['./', './products/', './contact/', './privacy/']) {
+  for (const route of [
+    './',
+    './products/',
+    './products/arrows-puzzle-pro/',
+    './contact/',
+    './privacy/',
+  ]) {
     await page.goto(route);
     const widths = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
@@ -348,6 +372,7 @@ test('key pages and the open mobile menu have no serious accessibility violation
     './',
     './products/',
     './products/neon-bubble-galaxy/',
+    './products/arrows-puzzle-pro/',
     './services/',
     './contact/',
     './privacy/',

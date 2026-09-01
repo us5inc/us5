@@ -1,11 +1,11 @@
 ---
 import EmailLink from '../components/EmailLink.astro';
 import LegalLayout from '../layouts/LegalLayout.astro';
-import { featuredProduct } from '../config/featured-product';
+import { arrowsPuzzlePro, featuredProduct } from '../config/featured-product';
 import { siteConfig } from '../config/site';
 import { withBase } from '../lib/urls';
 const deletionSections = [
-  { id: 'product-data', label: 'Neon Bubble Galaxy' },
+  { id: 'product-data', label: 'Published mobile games' },
   { id: 'email-correspondence', label: 'Email correspondence held by US5' },
   { id: 'what-to-include', label: 'What to include' },
   { id: 'google-processing', label: 'Google service processing' },
@@ -17,11 +17,12 @@ const deletionSections = [
   title="Data deletion instructions"
   description="How to request deletion of information associated with US5 Incorporation correspondence or products."
   path="/data-deletion/"
-  updated="29 August 2026"
+  updated="1 September 2026"
   sections={deletionSections}
-  ><h2 id="product-data">{featuredProduct.name}</h2><p>
-    {featuredProduct.name} does not provide a US5 account or saved profile. As a result, US5 does not
-    operate an in-game account or saved-profile deletion process.
+  ><h2 id="product-data">Published mobile games</h2><p>
+    <strong>{featuredProduct.name}</strong> and <strong>{arrowsPuzzlePro.name}</strong>
+    {' '}do not provide a US5 account or saved profile. As a result, US5 does not operate an in-game
+    account or saved-profile deletion process for either game.
   </p><h2 id="email-correspondence">Email correspondence held by US5</h2><p>
     If you emailed US5 Incorporation and want the related correspondence reviewed for deletion,
     email <EmailLink email={siteConfig.email} subject="Data deletion request"
