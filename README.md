@@ -31,7 +31,7 @@ For a custom domain, add the domain in **Settings → Pages**, configure the DNS
 
 ## Published products
 
-`src/config/featured-product.ts` contains the lightweight verified public information used to present Neon Bubble Galaxy and Arrows Puzzle Pro across the homepage and Products page. Their dedicated routes are `/products/neon-bubble-galaxy/` and `/products/arrows-puzzle-pro/`, with shared privacy, support, and data-deletion links supplied by the same configuration. There are no verified Google Play listing URLs, so the website intentionally renders no Google Play buttons.
+`src/config/featured-product.ts` contains the lightweight verified public information used to present Neon Bubble Galaxy and Arrows Puzzle Pro across the homepage and Products page. Their dedicated routes are `/products/neon-bubble-galaxy/` and `/products/arrows-puzzle-pro/`, with verified Google Play listing URLs and shared privacy, support, and data-deletion links supplied by the same configuration. Google Play links open in a new tab.
 
 ## Adding a future store product
 

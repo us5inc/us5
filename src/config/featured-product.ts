@@ -8,6 +8,8 @@ export const publishedProducts = [
     summary: 'A mobile game published by US5 Incorporation.',
     icon: '/images/neon-bubble-galaxy.png',
     productPath: '/products/neon-bubble-galaxy/',
+    playUrl:
+      'https://play.google.com/store/apps/details?id=com.us5.neongalaxy&pcampaignid=web_share',
     privacyPath: '/privacy/',
     supportPath: '/support/',
     deletionPath: '/data-deletion/',
@@ -21,6 +23,7 @@ export const publishedProducts = [
     summary: 'A mobile game published by US5 Incorporation.',
     icon: '/images/arrows-puzzle-pro.png',
     productPath: '/products/arrows-puzzle-pro/',
+    playUrl: 'https://play.google.com/store/apps/details?id=com.us5.arrows&pcampaignid=web_share',
     privacyPath: '/privacy/',
     supportPath: '/support/',
     deletionPath: '/data-deletion/',

@@ -24,6 +24,14 @@ import { withBase } from '../lib/urls';
               <a class="button compact" href={withBase(product.productPath)}>
                 View product
               </a>
+              <a
+                href={product.playUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={'View ' + product.name + ' on Google Play'}
+              >
+                View on Google Play
+              </a>
               <a href={withBase(product.privacyPath)}>Privacy</a>
               <a href={withBase(product.supportPath)}>Support</a>
               <a href={withBase(product.deletionPath)}>Data deletion</a>

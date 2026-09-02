@@ -1,6 +1,19 @@
 import { expect, test, type Locator } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+const verifiedPlayListings = [
+  {
+    name: 'Neon Bubble Galaxy',
+    slug: 'neon-bubble-galaxy',
+    href: 'https://play.google.com/store/apps/details?id=com.us5.neongalaxy&pcampaignid=web_share',
+  },
+  {
+    name: 'Arrows Puzzle Pro',
+    slug: 'arrows-puzzle-pro',
+    href: 'https://play.google.com/store/apps/details?id=com.us5.arrows&pcampaignid=web_share',
+  },
+] as const;
+
 const renderedContrast = (locator: Locator) =>
   locator.evaluate((element) => {
     const parseColor = (value: string) => {
@@ -77,7 +90,7 @@ test('home keeps one page heading and both published games visible across breakp
 test('Products exposes both published games and the Arrows product route', async ({ page }) => {
   await page.goto('./products/');
   await expect(page.getByRole('heading', { level: 2, name: 'Neon Bubble Galaxy' })).toBeVisible();
-  const arrowsLink = page.getByRole('link', { name: 'Arrows Puzzle Pro' });
+  const arrowsLink = page.getByRole('link', { name: 'Arrows Puzzle Pro', exact: true });
   await expect(arrowsLink).toBeVisible();
   await expect(arrowsLink).toHaveAttribute('href', /\/products\/arrows-puzzle-pro\/$/);
 
@@ -88,6 +101,28 @@ test('Products exposes both published games and the Arrows product route', async
   await expect(
     page.getByRole('definition').filter({ hasText: 'Published mobile game' }),
   ).toBeVisible();
+});
+test('both games expose their exact verified Google Play listing on every product surface', async ({
+  page,
+}) => {
+  for (const product of verifiedPlayListings) {
+    for (const surface of [
+      { route: './', selector: 'article.product-feature' },
+      { route: './products/', selector: 'article.product-card' },
+      { route: './products/' + product.slug + '/', selector: 'main' },
+    ]) {
+      await page.goto(surface.route);
+      const scope = page.locator(surface.selector).filter({ hasText: product.name });
+      const link = scope.getByRole('link', {
+        name: 'View ' + product.name + ' on Google Play',
+      });
+      await expect(link).toHaveCount(1);
+      await expect(link).toHaveText('View on Google Play');
+      await expect(link).toHaveAttribute('href', product.href);
+      await expect(link).toHaveAttribute('target', '_blank');
+      await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    }
+  }
 });
 test('home diagram settles immediately for reduced motion', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });

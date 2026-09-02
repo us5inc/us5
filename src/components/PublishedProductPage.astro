@@ -21,8 +21,13 @@ const { product } = Astro.props;
           <div><dt>Category</dt><dd>{product.category}</dd></div>
           <div><dt>Status</dt><dd>{product.status}</dd></div>
         </dl><nav class="product-links" aria-label={`${product.name} resources`}>
-          <a href={withBase(product.privacyPath)}>Privacy</a><a href={withBase(product.supportPath)}
-            >Support</a
+          <a
+            href={product.playUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={'View ' + product.name + ' on Google Play'}>View on Google Play</a
+          ><a href={withBase(product.privacyPath)}>Privacy</a><a
+            href={withBase(product.supportPath)}>Support</a
           ><a href={withBase(product.deletionPath)}>Data deletion</a>
         </nav>
       </div><div class="artwork">

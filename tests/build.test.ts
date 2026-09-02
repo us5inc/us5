@@ -30,6 +30,12 @@ const orderedListItems = (html: string, className: string) => {
 };
 const productLinks = (html: string) =>
   html.match(/<nav class="product-links"[^>]*>(.*?)<\/nav>/s)?.[1] ?? '';
+const productArticle = (html: string, productName: string) =>
+  (mainContent(html).match(/<article\b[^>]*>[\s\S]*?<\/article>/g) ?? []).find((article) =>
+    article.includes(productName),
+  ) ?? '';
+const googlePlayLinks = (html: string) =>
+  html.match(/<a\b[^>]*>\s*View on Google Play\s*<\/a>/g) ?? [];
 const visibleCopy = (html: string) =>
   html
     .replace(/<(script|style)\b[^>]*>.*?<\/\1>/gis, '')
@@ -40,6 +46,18 @@ const visibleCopy = (html: string) =>
     .join('\n');
 const productIcon = (html: string, iconPath = '/us5/images/neon-bubble-galaxy.png') =>
   html.match(/<img\b[^>]*>/gi)?.find((tag) => tag.includes(`src="${iconPath}"`)) ?? '';
+const verifiedPlayListings = [
+  {
+    name: 'Neon Bubble Galaxy',
+    slug: 'neon-bubble-galaxy',
+    href: 'https://play.google.com/store/apps/details?id=com.us5.neongalaxy&amp;pcampaignid=web_share',
+  },
+  {
+    name: 'Arrows Puzzle Pro',
+    slug: 'arrows-puzzle-pro',
+    href: 'https://play.google.com/store/apps/details?id=com.us5.arrows&amp;pcampaignid=web_share',
+  },
+] as const;
 const expectedProcessSteps = [
   [
     'Define',
@@ -334,15 +352,40 @@ describe('generated corporate site', () => {
     expect(productLinks(html)).toContain('href="/us5/privacy/"');
     expect(productLinks(html)).toContain('href="/us5/support/"');
     expect(productLinks(html)).toContain('href="/us5/data-deletion/"');
-    expect(productLinks(html).match(/<a\b/g) ?? []).toHaveLength(3);
-    expect(productLinks(html)).not.toMatch(/href="https?:\/\//i);
+    expect(productLinks(html).match(/<a\b/g) ?? []).toHaveLength(4);
     expect(main).not.toMatch(/\b(?:coming soon|in development)\b/i);
+  });
+
+  it('publishes each verified Google Play listing on every product surface', () => {
+    const home = page('');
+    const listing = page('products');
+
+    for (const product of verifiedPlayListings) {
+      const surfaces = [
+        ['home', productArticle(home, product.name)],
+        ['products', productArticle(listing, product.name)],
+        [`products/${product.slug}`, mainContent(page(`products/${product.slug}`))],
+      ] as const;
+
+      for (const [surface, html] of surfaces) {
+        expect(html, `${product.name} is missing from ${surface}`).not.toBe('');
+        const links = googlePlayLinks(html);
+        expect(links, `${product.name} needs one Google Play link on ${surface}`).toHaveLength(1);
+        const link = links[0] ?? '';
+        expect(link).toContain(`href="${product.href}"`);
+        expect(link).toContain('target="_blank"');
+        expect(link).toContain('rel="noopener noreferrer"');
+        expect(link).toContain(`aria-label="View ${product.name} on Google Play"`);
+        expect(
+          html.match(/<a\b[^>]*\bhref="https?:\/\/[^"]+"[^>]*>[\s\S]*?<\/a>/g) ?? [],
+          `${product.name} has an unapproved external product link on ${surface}`,
+        ).toEqual([link]);
+      }
+    }
   });
 
   it('omits unverified store metadata and marketing claims', () => {
     const prohibitedCopy = [
-      ['View on Google Play copy', /(?:^|\n)View on Google Play(?:\n|$)/i],
-      ['store listing copy', /(?:^|\n)(?:Google Play|Play Store|App Store)(?:\n|$)/i],
       [
         'package or application ID',
         /(?:^|\n)(?:package(?: name)?|application ID)(?:[ \t]*:[^\n]+)?(?:\n|$)|(?:\b[a-z][a-z0-9_-]*\.){2,}[a-z][a-z0-9_-]*\b/i,
@@ -377,15 +420,6 @@ describe('generated corporate site', () => {
       const html = page(route);
       const main = mainContent(html);
       const copy = visibleCopy(main);
-      expect(productLinks(html), route + ' contains an external product link').not.toMatch(
-        /href="https?:\/\//i,
-      );
-      expect(main, route + ' contains a Play or App Store URL').not.toMatch(
-        /https?:\/\/(?:play\.google\.com\/store\/apps|apps\.apple\.com\/[^"]*\/app\/)[^"<\s]*/i,
-      );
-      expect(main, route + ' contains a Play or App Store badge').not.toMatch(
-        /(?:alt|aria-label|title)="[^"]*(?:Google Play|Play Store|App Store)[^"]*"/i,
-      );
       expect(main, route + ' contains a screenshot image').not.toMatch(
         /(?:src|alt|aria-label)="[^"]*\bscreenshot\b[^"]*"/i,
       );
